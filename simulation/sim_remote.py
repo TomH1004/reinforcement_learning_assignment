@@ -24,7 +24,8 @@ def run_manual_control():
         0: {'speed': 20, 'energy': -10},
         1: {'angle': -45, 'energy': -10},
         2: {'angle': 45, 'energy': -10},
-        3: {'speed': -20, 'energy': -10}
+        3: {'speed': -20, 'energy': -10},
+        4: {'speed': 0, 'angle': 0, 'energy': 0}
     }
 
     sim_car = Car(actions_dict=actions_dict, car_file='./sim_world/envs/Lego-Robot.png', 
@@ -37,6 +38,8 @@ def run_manual_control():
     # Main loop
     running = True
     env.reset()
+    env.step(4)
+    env.render()
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
