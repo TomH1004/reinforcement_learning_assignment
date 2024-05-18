@@ -60,6 +60,8 @@ def greedy(policy, state):
     __key = str(state[0]) + ' ' + str(state[1]) + ' ' + str(state[2])
     return policy[__key]
 
+
+# Parallel to this method, there is a method in reinforcement_learning_assignment\robot\ev3\main_robot_micpy.py
 def preprocessing_observations(observations, states_list):
     # states_list = [['west'], ['north'], ['east']] 
     __car_X = 50
@@ -80,6 +82,34 @@ def preprocessing_observations(observations, states_list):
         __obs_discrete.append(__value)   
     logger.debug('OBSERVATION DISCRETE \'%s\'', str(__obs_discrete))
     return __obs_discrete
+
+def preprocessing_observations_5(observations, states_list):
+    # states_list = [['west'], ['north'], ['east']] 
+    __car_X = 50
+    __car_size = 24 # cm
+    __resize_factor = __car_X / __car_size
+    __obs_discrete = []
+
+    for __observation in observations:
+        if (__observation < (5 +(__car_size * __resize_factor))):
+            # obstacle detected
+            __value = states_list[1][0]
+        elif (__observation < (10 + (__car_size * __resize_factor))):
+                # close obstacle detected
+                __value = states_list[1][1]
+        elif (__observation < (15 + (__car_size * __resize_factor))):
+                # obstacle detected
+                __value = states_list[1][2]
+        elif (__observation < (20 + (__car_size * __resize_factor))):
+                # obstacle detected
+                __value = states_list[1][3]        
+        else:
+            # no obstacle detected
+            __value = states_list[1][4]
+        __obs_discrete.append(__value)   
+    logger.debug('OBSERVATION DISCRETE \'%s\'', str(__obs_discrete))
+    return __obs_discrete
+
 
 def train_model(env, agent, states_list, file_path, file_prefix, file_suffix, q_table=None):
     """train the agent in the given env
@@ -145,8 +175,9 @@ def _runExperiment_NStep(agent_nEpisodes, env, agent, states_list, observation_s
       
     __state = env.reset()
 
-    # preprocessing of the measured values
-    __state = preprocessing_observations(observations=__state, states_list=states_list)
+    #__state = preprocessing_observations(observations=__state, states_list=states_list)
+    # preprocessing of the measured values (uses 5 states for north, ost and west)
+    __state = preprocessing_observations_5(observations=__state, states_list=states_list)
 
     # transform to 1d-coodinates
     __state = __convert_3d_to_1d(state_3d=__state, observation_space_num=observation_space_num)
@@ -163,8 +194,8 @@ def _runExperiment_NStep(agent_nEpisodes, env, agent, states_list, observation_s
       __new_state, __reward, __done, __info = env.step(__action)
 
       # preprocessing of the measured values
-      __new_state = preprocessing_observations(observations=__new_state, states_list=states_list)
-      
+      #__new_state = preprocessing_observations(observations=__new_state, states_list=states_list)
+      __new_state = preprocessing_observations_5(observations=__new_state, states_list=states_list)
       # transform to 1d-coodinates
       __new_state = __convert_3d_to_1d(state_3d=__new_state, observation_space_num=observation_space_num)   
 
@@ -399,9 +430,11 @@ if __name__ == '__main__':
     CAR_ENERGY_MAX = 1000
 
     # States & Actions
-    nStates = 27
+    
+    nStates = 125        # 5*5*5
     # states_list = [['west'], ['north'], ['east']]
-    states_list = [[0, 1, 2], [0, 1, 2], [0, 1, 2]]
+    #states_list = [[0, 1, 2], [0, 1, 2], [0, 1, 2]]
+    states_list = [[0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4]]
     actions_dict = {
         0: {'speed' : 20, 'energy' : -10},
         1: {'angle' : -45, 'energy' : -10},
