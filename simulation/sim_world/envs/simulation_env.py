@@ -43,9 +43,9 @@ class CustomEnv(gym.Env):
         obs = np.array(self.pygame.observe())
         reward = self.pygame.evaluate()
         done = self.pygame.is_done()
-        __car_dicct = {"X": self.car._center[0], "Y": self.car._center[1], "angle": self.car._angle, "speed": self.car._speed, "is alive": self.car._is_alive, "is crashed": self.car._is_crashed, "energy max": self.car.energy_max, "energy": self.car.energy}
+        __car_dicct = {"X": self.car._center[0], "Y": self.car._center[1], "angle": self.car._angle, "speed": self.car._speed, "is alive": self.car._is_alive, "is crashed": self.car._is_crashed, "energy max": self.car.energy_max, "energy": self.car.energy, "goal_reached": self.pygame._map_goal_reached}
         __env_dicct = {}
-        info = {'prob': 1, "car": __car_dicct, "env": __env_dicct}
+        info = {'prob': 1, "car": __car_dicct, "env": __env_dicct, "goal_reached": self.pygame._map_goal_reached}
         logger.debug('ENV-STEP: obs=\'%s\' \t reward=\'%s\' \t done=\'%s\' \t info=\'%s\'', obs, reward, done, info)
         return obs, reward, done, info
 

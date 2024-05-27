@@ -43,13 +43,21 @@ def run_model(env, policy, states_list):
     __state = env.reset()
 
     __done = False
+    total_steps = 0
+    total_reward = 0
+    
     while (__done == False):
+        total_steps += 1
         # preprocessing of the measured values
         __preprocessed_state = preprocessing_observations(observations=__state, states_list=states_list)
 
         # select the best action; based on state
         __action = greedy(policy=policy, state=__preprocessed_state)
         __state, __reward, __done, __info = env.step(__action)
+        total_reward += __reward
+        
+    logger.info('Run Statistics: Steps = %d, Reward = %.2f',
+                total_steps, total_reward)
             
 def greedy(policy, state):
     '''
@@ -96,7 +104,7 @@ def train_model(env, agent, states_list, file_path, file_prefix, file_suffix, q_
         agent.actionValueTable = q_table
         logger.info('USE GIVEN Q-TABLE')
 
-    __reward_sums, __evst, __actionValueTable_history = _runExperiment_NStep(agent_nEpisodes=agent_nEpisodes, env=env, agent=agent, states_list=states_list, observation_space_num=__observation_space_nums)
+    __reward_sums, __evst, __actionValueTable_history, stats = _runExperiment_NStep(agent_nEpisodes=agent_nEpisodes, env=env, agent=agent, states_list=states_list, observation_space_num=__observation_space_nums)
     
     np.save(file_path + file_prefix + 'q-table' + file_suffix + '.npy', __actionValueTable_history[-1])
     np.save(file_path + file_prefix + 'reward_sums' + file_suffix + '.npy', __reward_sums)
@@ -106,6 +114,9 @@ def train_model(env, agent, states_list, file_path, file_prefix, file_suffix, q_
     __q_policy = __convert_q_table_to_policy(q_table=__actionValueTable_history[-1], observation_space_num=__observation_space_nums)
     __store_dict_as_json(dict_data=__q_policy, file_name=__json_path)
 
+    logger.info('Training Statistics: Avg Steps = %.2f, Avg Reward = %.2f, Goal Rate = %.2f%%',
+                stats['avg_steps'], stats['avg_reward'], stats['goal_rate'])
+
 def test_model(env, agent, states_list, file_path, file_prefix, file_suffix, q_table=None):
     # load rewards and q-table
     __rewards = read_numpy_data(numpy_file=file_path + file_prefix + 'reward_sums' + file_suffix)
@@ -113,8 +124,10 @@ def test_model(env, agent, states_list, file_path, file_prefix, file_suffix, q_t
     __q_data = read_numpy_data(numpy_file=file_path + file_prefix + 'q-table' + file_suffix)
 
     # test the q-table
-    __reward_sums, __episodesvstimesteps = _test_q_table(q_table=__q_data, env=env, states_list=states_list, agent_nEpisodes=10)
+    __reward_sums, __episodesvstimesteps, stats = _test_q_table(q_table=__q_data, env=env, states_list=states_list, agent_nEpisodes=10)
     logger.debug('reward sums = \'%s\'', str(__reward_sums))
+    logger.info('Test Statistics: Avg Steps = %.2f, Avg Reward = %.2f, Goal Rate = %.2f%%',
+                stats['avg_steps'], stats['avg_reward'], stats['goal_rate'])
 
 ################################################################
 ### Additional functions only for the simulation environment ###
@@ -134,10 +147,16 @@ def _runExperiment_NStep(agent_nEpisodes, env, agent, states_list, observation_s
         list: reward_sums
         list: episodesvstimesteps 
         list: actionValueTable_history
+        dict: statistics
   """
   __reward_sums = []
   __episodesvstimesteps = []
   __actionValueTable_history = []
+  
+  total_steps = 0
+  total_rewards = 0
+  goals_reached = 0
+
   for __e in range(agent_nEpisodes):
     __timesteps = 0
     if (__e % 100 == 0):
@@ -192,6 +211,12 @@ def _runExperiment_NStep(agent_nEpisodes, env, agent, states_list, observation_s
           env.render()
     __episodesvstimesteps.append([__e, __timesteps])
 
+    total_steps += __timesteps
+    total_rewards += __reward_sums[-1]
+    if __info.get('goal_reached', False):
+        goals_reached += 1
+        print(f"Episode {__e}: REACHED GOAL")
+
     # store table data
     if (__e % 50 == 0):
         if (agent.getName() == 'Double Q-Learning'):
@@ -204,7 +229,17 @@ def _runExperiment_NStep(agent_nEpisodes, env, agent, states_list, observation_s
         __title = agent.getName() + ' Episode:' + str(__e)
         logger.debug('%s | reward_sums = \'%s\'', str(__title), str(__reward_sums[-1]))
       
-  return __reward_sums, np.array(__episodesvstimesteps), __actionValueTable_history
+  avg_steps = total_steps / agent_nEpisodes
+  avg_reward = total_rewards / agent_nEpisodes
+  goal_rate = (goals_reached / agent_nEpisodes) * 100
+
+  stats = {
+      'avg_steps': avg_steps,
+      'avg_reward': avg_reward,
+      'goal_rate': goal_rate
+  }
+
+  return __reward_sums, np.array(__episodesvstimesteps), __actionValueTable_history, stats
 
 def _test_q_table(q_table, env, states_list, agent_nEpisodes):
   """test the given q-table under an greedy policy (argmax)
@@ -217,11 +252,17 @@ def _test_q_table(q_table, env, states_list, agent_nEpisodes):
   Returns:
       reward_sums (list): sum of rewards per Episode
       episodesvstimesteps (np.array): steps per episode
+      dict: statistics
   """
   __observation_space_nums = __get_observation_space_num(env=env, states_list=states_list)
 
   __reward_sums = []
   __episodesvstimesteps = []
+  
+  total_steps = 0
+  total_rewards = 0
+  goals_reached = 0
+
   for __e in range(agent_nEpisodes):
       __timesteps = 0
           
@@ -263,7 +304,25 @@ def _test_q_table(q_table, env, states_list, agent_nEpisodes):
           __reward_sums[-1] += __reward
       __episodesvstimesteps.append([__e, __timesteps])
 
-  return __reward_sums, np.array(__episodesvstimesteps)
+      total_steps += __timesteps
+      total_rewards += __reward_sums[-1]
+      total_checkpoints += __info.get('checkpoints', 0)
+      total_distance += __info.get('distance', 0)
+      if __info.get('goal_reached', False):
+        goals_reached += 1
+        print(f"Episode {__e}: REACHED GOAL")
+
+  avg_steps = total_steps / agent_nEpisodes
+  avg_reward = total_rewards / agent_nEpisodes
+  goal_rate = (goals_reached / agent_nEpisodes) * 100
+
+  stats = {
+      'avg_steps': avg_steps,
+      'avg_reward': avg_reward,
+      'goal_rate': goal_rate
+  }
+
+  return __reward_sums, np.array(__episodesvstimesteps), stats
 
 def __get_observation_space_num(env, states_list):
     """get the number of steps per dimenion of the observation space
@@ -395,18 +454,20 @@ if __name__ == '__main__':
     MAP_START_COORDINATES = (90, 550)
     MAP_CHECK_POINT_LIST= [(290, 550), (670, 250), (1210, 160)]
 
-    CAR_ENERGY_START = 1000
-    CAR_ENERGY_MAX = 1000
+    CAR_ENERGY_START = 2000
+    CAR_ENERGY_MAX = 2000
 
     # States & Actions
     nStates = 27
     # states_list = [['west'], ['north'], ['east']]
     states_list = [[0, 1, 2], [0, 1, 2], [0, 1, 2]]
     actions_dict = {
-        0: {'speed' : 20, 'energy' : -10},
-        1: {'angle' : -45, 'energy' : -10},
-        2: {'angle' : 45, 'energy' : -10},
-        3: {'speed' : -20, 'energy' : -10}
+        0: {'speed' : 20, 'energy' : -2},
+        1: {'angle' : -45, 'energy' : -15},
+        2: {'angle' : 45, 'energy' : -15},
+        3: {'angle' : -15, 'energy' : -5},
+        4: {'angle' : 15, 'energy' : -5},
+        5: {'speed' : 5, 'energy' : -1}
     }
     nActions = len(actions_dict)
 
@@ -422,10 +483,10 @@ if __name__ == '__main__':
     agent_nEpisodes = 10000
 
     # Agent
-    agent_alpha = 0.2
+    agent_alpha = 0.1
     agent_gamma = 0.9
 
-    agent_n_steps = 20
+    agent_n_steps = 5
     
     # Policy
     policy_epsilon = 0.1
