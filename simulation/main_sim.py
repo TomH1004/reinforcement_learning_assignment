@@ -216,6 +216,7 @@ def _runExperiment_NStep(agent_nEpisodes, env, agent, states_list, observation_s
     if __info.get('goal_reached', False):
         goals_reached += 1
         print(f"Episode {__e}: REACHED GOAL")
+        print(f"Episode {__e}: Reward = {__reward_sums[-1]}")
 
     # store table data
     if (__e % 50 == 0):
@@ -306,8 +307,6 @@ def _test_q_table(q_table, env, states_list, agent_nEpisodes):
 
       total_steps += __timesteps
       total_rewards += __reward_sums[-1]
-      total_checkpoints += __info.get('checkpoints', 0)
-      total_distance += __info.get('distance', 0)
       if __info.get('goal_reached', False):
         goals_reached += 1
         print(f"Episode {__e}: REACHED GOAL")

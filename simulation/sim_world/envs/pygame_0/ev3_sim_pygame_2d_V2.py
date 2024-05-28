@@ -134,35 +134,46 @@ class PyGame2D:
         """
         reward = 0
 
-        # Progress reward towards the final goal
-        initial_distance_to_goal = self._get_distance(self._car_start_pos, self._map_checkpoint_list[-1])
-        current_distance_to_goal = self._get_distance(self._car._center, self._map_checkpoint_list[-1])
-        if initial_distance_to_goal != 0:
-            progress_reward = 2 * (initial_distance_to_goal - current_distance_to_goal) / initial_distance_to_goal
-            reward += progress_reward
+        last_action_index = self._car._last_action
+        if last_action_index in self._car.actions_dict:
+            action = self._car.actions_dict[last_action_index]
+            if 'speed' in action:
+                initial_distance_to_goal = self._get_distance(self._car_start_pos, self._map_checkpoint_list[-1])
+                current_distance_to_goal = self._get_distance(self._car._center, self._map_checkpoint_list[-1])
+                if initial_distance_to_goal != 0:
+                    progress_reward = 2 * (initial_distance_to_goal - current_distance_to_goal) / initial_distance_to_goal
+                    reward += progress_reward
 
         # Reward for reaching checkpoints (evaluated at each step, but only rewards once per checkpoint)
         for i, checkpoint in enumerate(self._map_checkpoint_list):
             if self._get_distance(self._car._center, checkpoint) <= self._map_checkpoint_radius:
                 if i not in self._reached_checkpoints:
                     self._reached_checkpoints.add(i)
-                    reward += 500  # Large reward for reaching a checkpoint
+                    reward += 1500  # Large reward for reaching a checkpoint
 
         # Penalty for collisions (evaluated at each step)
         if self._car._is_crashed:
             reward -= 2000
 
+        # Large negative reward if energy is depleted (evaluated at each step)
+        if self._car.energy <= 0:
+            reward -= 1000
+
         # Additional reward for reaching the final checkpoint (evaluated at each step)
         if self._map_goal_reached:
-            reward += 1000  # Additional reward for completing all checkpoints
+            reward += 5000  # Additional reward for completing all checkpoints
 
         # Penalty for energy consumption (evaluated at each step)
         energy_penalty = (self._car.energy_max - self._car.energy) * 0.02
         reward -= energy_penalty
 
         # Reward for moving away from the start point (evaluated at each step)
-        distance_from_start = self._get_distance(self._car._center, self._car_start_pos)
-        reward += 0.05 * distance_from_start  # Adjust the multiplier as needed
+        last_action_index = self._car._last_action
+        if last_action_index in self._car.actions_dict:
+            action = self._car.actions_dict[last_action_index]
+            if 'speed' in action:
+                distance_from_start = self._get_distance(self._car._center, self._car_start_pos)
+                reward += 0.05 * distance_from_start  # Adjust the multiplier as needed
 
         # Negative reward for turning too much (evaluated at each step)
         last_action_index = self._car._last_action
