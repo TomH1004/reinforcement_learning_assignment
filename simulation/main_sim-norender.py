@@ -7,6 +7,7 @@ import logger
 import json
 
 import numpy as np
+import matplotlib.pyplot as plt
 import gym
 from reinforcement_agents.agents import TemporalDifferenceLearning as TDL
 from sim_world.envs.car_0.ev3_sim_car import SimCar as Car
@@ -219,8 +220,8 @@ def _runExperiment_NStep(agent_nEpisodes, env, agent, states_list, observation_s
       
       __reward_sums[-1] += __reward
 
-      if (__e % 50 == 0):
-          env.render()
+      #if (__e % 50 == 0):
+          #env.render()
     __episodesvstimesteps.append([__e, __timesteps])
 
     # store table data
@@ -287,8 +288,8 @@ def _test_q_table(q_table, env, states_list, agent_nEpisodes):
 
           __state = __new_state
           
-          if (__e % 1 == 0):
-              env.render()
+          #if (__e % 1 == 0):
+          #    env.render()
 
           #episodesvstimesteps.append([e,timesteps])
           __reward_sums[-1] += __reward
@@ -391,11 +392,30 @@ def read_numpy_data(numpy_file):
     __data = np.load(numpy_file + '.npy')
     return __data
 
+
+def floating_avarage():
+    rewards = np.load("../model_storage/2024-05-23_08-05-23/reward_sums_SARSA_2024-05-23_08-05-23.npy")
+    # Berechne den gleitenden Durchschnitt mit einem Fenster von 10 Episoden
+    window_size = 10
+
+    # moving avarage
+    rewards_smooth = np.convolve(rewards, np.ones(window_size)/window_size, mode='valid')
+
+    # Erstelle das Liniendiagramm des gleitenden Durchschnitts
+    plt.figure(figsize=(12, 6))
+    plt.plot(rewards_smooth, label='Moving Average of Rewards', color='orange')
+    plt.xlabel('Episode')
+    plt.ylabel('Sum of Rewards')
+    plt.title('Moving Average of Rewards in Each Episode')
+    plt.legend()
+    plt.grid(True)
+    plt.show()
 ################################################################
 ###                          M A I N                         ###
 ################################################################
              
 if __name__ == '__main__':
+    floating_avarage()
     ROOT_FILE_PATH = "../model_storage/"
 
     current_datetimestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -441,6 +461,18 @@ if __name__ == '__main__':
         2: {'angle' : 45, 'energy' : -10},
         3: {'speed' : -20, 'energy' : -10}
     }
+
+    # eight actions
+    actions_dict8 = {
+        0: {'speed' : 20, 'energy' : -10},
+        1: {'speed' : 10, 'energy' : -10},
+        2: {'angle' : -45, 'energy' : -10},
+        3: {'angle' : -32, 'energy' : -10},
+        4: {'angle' : 32, 'energy' : -10},
+        5: {'angle' : 45, 'energy' : -10},
+        6: {'speed' : -10, 'energy' : -10},
+        7: {'speed' : -20, 'energy' : -10}
+    }
     nActions = len(actions_dict)
 
     sim_car = Car(actions_dict = actions_dict, car_file = './sim_world/envs/Lego-Robot.png', energy = CAR_ENERGY_START, energy_max = CAR_ENERGY_MAX)
@@ -452,7 +484,7 @@ if __name__ == '__main__':
 
     agent_exerciseID = 0
     agent_nExperiments = 1
-    agent_nEpisodes = 10000
+    agent_nEpisodes = 500
 
     # Agent
     agent_alpha = 0.2
