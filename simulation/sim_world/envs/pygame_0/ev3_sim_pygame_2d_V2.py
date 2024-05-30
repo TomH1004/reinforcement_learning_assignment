@@ -17,6 +17,7 @@ class PyGame2D:
         MAP_CHECKPOINT_RADIUS = 50
         self._map_screen_width = 1280
         self._map_screen_height = 720
+        self._reached_checkpoints = set()
         
         # pygame initalization
         pygame.init()
@@ -126,25 +127,67 @@ class PyGame2D:
         self._car._speed=0
 
     def evaluate(self):
-        """evaluate the rewards
+        """Evaluate the rewards based on the current state/action.
 
         Returns:
-            int: reward value given the current state/action
+            int: reward value given the current state/action.
         """
-        # reward for distance from goal (= last checkpoint)
-        if self._get_distance(self._car._center, self._map_checkpoint_list[-1]) != 0:
-            __reward = 0.1*(self._get_distance(self._car_start_pos, self._map_checkpoint_list[-1]) / self._get_distance(self._car._center, self._map_checkpoint_list[-1]))
-        else:
-            __reward = 0
+        reward = 0
 
-        if(self._map_check_flag):
-            self._map_check_flag = False
-            __reward += 1000
-            #print("Checkpoint num:", self.car.current_check , "/", len(check_point))
+        last_action_index = self._car._last_action
+        if last_action_index in self._car.actions_dict:
+            action = self._car.actions_dict[last_action_index]
+            if 'speed' in action:
+                initial_distance_to_goal = self._get_distance(self._car_start_pos, self._map_checkpoint_list[-1])
+                current_distance_to_goal = self._get_distance(self._car._center, self._map_checkpoint_list[-1])
+                if initial_distance_to_goal != 0:
+                    progress_reward = 2 * (initial_distance_to_goal - current_distance_to_goal) / initial_distance_to_goal
+                    reward += progress_reward
 
-        if(self._car._is_crashed == True):
-            __reward+=-100
-        return __reward
+        # Reward for reaching checkpoints (evaluated at each step, but only rewards once per checkpoint)
+        for i, checkpoint in enumerate(self._map_checkpoint_list):
+            if self._get_distance(self._car._center, checkpoint) <= self._map_checkpoint_radius:
+                if i not in self._reached_checkpoints:
+                    self._reached_checkpoints.add(i)
+                    reward += 1500  # Large reward for reaching a checkpoint
+
+        # Penalty for collisions (evaluated at each step)
+        if self._car._is_crashed:
+            reward -= 2000
+
+        # Large negative reward if energy is depleted (evaluated at each step)
+        if self._car.energy <= 0:
+            reward -= 1000
+
+        # Additional reward for reaching the final checkpoint (evaluated at each step)
+        if self._map_goal_reached:
+            reward += 5000  # Additional reward for completing all checkpoints
+
+        # Penalty for energy consumption (evaluated at each step)
+        energy_penalty = (self._car.energy_max - self._car.energy) * 0.02
+        reward -= energy_penalty
+
+        # Reward for moving away from the start point (evaluated at each step)
+        last_action_index = self._car._last_action
+        if last_action_index in self._car.actions_dict:
+            action = self._car.actions_dict[last_action_index]
+            if 'speed' in action:
+                distance_from_start = self._get_distance(self._car._center, self._car_start_pos)
+                reward += 0.05 * distance_from_start  # Adjust the multiplier as needed
+
+        # Negative reward for turning too much (evaluated at each step)
+        last_action_index = self._car._last_action
+        if last_action_index in self._car.actions_dict:
+            action = self._car.actions_dict[last_action_index]
+            if 'angle' in action:
+                angle_change = abs(action['angle'])
+                reward -= 0.1 * angle_change  # Adjust the multiplier as needed
+
+        return reward
+
+
+
+
         
     def is_done(self):
         """check if the Car is still alive
