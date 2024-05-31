@@ -48,6 +48,7 @@ class PyGame2D:
         self._map_check_flag = False
         self._map_goal_reached = False
         self._car.set_start_position(self._car_start_pos)
+        self._reached_checkpoints.clear()
 
     def _check_collision(self):
         """check if the Car hitbox touches obstacle pixels
@@ -148,6 +149,7 @@ class PyGame2D:
         for i, checkpoint in enumerate(self._map_checkpoint_list):
             if self._get_distance(self._car._center, checkpoint) <= self._map_checkpoint_radius:
                 if i not in self._reached_checkpoints:
+                    print(f"Reached Checkpoint {i}")
                     self._reached_checkpoints.add(i)
                     reward += 1500  # Large reward for reaching a checkpoint
 

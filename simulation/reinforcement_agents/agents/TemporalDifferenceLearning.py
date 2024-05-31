@@ -129,6 +129,11 @@ class SARSA(TDControlAgent):
       td_error = reward + self.gamma * self.actionValueTable[next_state, next_action] - self.actionValueTable[state, action]
       self.actionValueTable[state, action] += self.alpha * td_error
       self.policy.update(state, self.actionValueTable[state,:])
+      # epsilon decay
+      self.policy.epsilon = self.policy.epsilon * 0.99
+  
+  def updateEpsilon(self, epsilon):
+    self.policy.epsilon = epsilon
 
 class ExpectedSARSA(TDControlAgent):
   

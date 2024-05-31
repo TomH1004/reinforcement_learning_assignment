@@ -479,7 +479,7 @@ if __name__ == '__main__':
 
     agent_exerciseID = 0
     agent_nExperiments = 1
-    agent_nEpisodes = 10000
+    agent_nEpisodes = 100
 
     # Agent
     agent_alpha = 0.1
@@ -510,6 +510,7 @@ if __name__ == '__main__':
     ######################### AGENT TRAIN #########################
 
     if (RETRAIN_MODEL):
+        # agent.policy.epsilon = 0
         q_data_file = CURRENT_FILE_PATH + file_prefix + 'q-table' + file_suffix
         rewards_file = CURRENT_FILE_PATH + file_prefix + 'reward_sums' + file_suffix
         # manual path
