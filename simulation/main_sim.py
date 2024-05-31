@@ -534,9 +534,12 @@ if __name__ == '__main__':
 
     ######################### ENVIRONMENT #########################
 
-    MAP = './sim_world/race_tracks/1.PNG'
-    MAP_START_COORDINATES = (90, 550)
-    MAP_CHECK_POINT_LIST= [(290, 550), (670, 250), (1210, 160)]
+    #MAP = './sim_world/race_tracks/1.PNG'
+    #MAP_START_COORDINATES = (90, 550)
+    #MAP_CHECK_POINT_LIST= [(290, 550), (670, 250), (1210, 160)]
+    MAP = './sim_world/open_world/3.PNG'
+    MAP_START_COORDINATES = (52, 180)
+    MAP_CHECK_POINT_LIST= [(70, 260), (280, 360), (800, 160) , (1200, 160)]
 
     CAR_ENERGY_START = 2000
     CAR_ENERGY_MAX = 2000
@@ -570,10 +573,9 @@ if __name__ == '__main__':
 
     n_trials=50
     # Agent
-    agent_alpha = 0.1
-    agent_gamma = 0.9
-
-    agent_n_steps = 5
+    agent_alpha = 0.1 # 0.1
+    agent_gamma = 0.9 # 0.9
+    agent_n_steps = 5 # 5
     
     # Policy
     policy_epsilon = 0.1
