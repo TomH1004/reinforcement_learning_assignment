@@ -1,3 +1,4 @@
+from functools import partial
 import sys
 import os
 
@@ -11,7 +12,8 @@ import gym
 from reinforcement_agents.agents import TemporalDifferenceLearning as TDL
 from sim_world.envs.car_0.ev3_sim_car import SimCar as Car
 from sim_world.envs.pygame_0.ev3_sim_pygame_2d_V2 import PyGame2D as Simulation
-
+import optuna
+import random
 # only for lecturer otherwise comment out the following line
 #path_to_main = ".\student\simulation"
 path_to_main = ".\simulation"
@@ -183,6 +185,17 @@ def _runExperiment_NStep(agent_nEpisodes, env, agent, states_list, observation_s
   __episodesvstimesteps = []
   __actionValueTable_history = []
   
+  noiseDefaultConf = {
+      'north': [0,0],
+      'west': [0,0],
+      'ost': [0,0]
+  }
+  noiseBlueConf = {
+      'north': [-5,1],
+      'west': [-1,1],
+      'ost': [0,1]
+  }
+  
   total_steps = 0
   total_rewards = 0
   goals_reached = 0
@@ -193,6 +206,9 @@ def _runExperiment_NStep(agent_nEpisodes, env, agent, states_list, observation_s
       logger.info('Episode: %s', str(__e))
       
     __state = env.reset()
+
+    # bring noice in data
+    __state = noise_sensors(__state, noiseDefaultConf)
 
     #__state = preprocessing_observations(observations=__state, states_list=states_list)
     # preprocessing of the measured values (uses 5 states for north, ost and west)
@@ -211,7 +227,8 @@ def _runExperiment_NStep(agent_nEpisodes, env, agent, states_list, observation_s
       __experiences[-1]['done'] = __done
       
       __new_state, __reward, __done, __info = env.step(__action)
-
+      # bring noise to data
+      __new_state = noise_sensors(__new_state, noiseDefaultConf)
       # preprocessing of the measured values
       #__new_state = preprocessing_observations(observations=__new_state, states_list=states_list)
       __new_state = preprocessing_observations_5(observations=__new_state, states_list=states_list)
@@ -449,18 +466,54 @@ def read_numpy_data(numpy_file):
     __data = np.load(numpy_file + '.npy')
     return __data
 
+def optimize_params(trial, env, nStates, states_list, q_table=None):
+        
+        """train the agent in the given env
+
+        Args:
+            trial: suggests hyper parameter
+            env (gym.Env): gym.Env to train in 
+            agent (agent): reinforcement agent to train
+            file_prefix (strings): #TODO
+            file_suffix (strings): #TODO
+            q_table (np.array, optional): q_table used for init. Defaults to None.
+        """
+        alpha = trial.suggest_float("alpha", 0.1, 0.2)
+        gamma = trial.suggest_float("gamma", 0.7, 0.9)
+        policy_epsilon = trial.suggest_float("epsilon", 0.1, 0.3)
+        logger.info('New set of new hyper parameter: alpha=%.2f, gamma=%.2f, epsilon=%.2f', alpha, gamma, policy_epsilon)
+        agent = TDL.SARSA(nStates, nActions, alpha, gamma, epsilon=policy_epsilon)
+        #agent = TDL.QLearning(nStates, nActions, alpha, gamma, epsilon=policy_epsilon)
+        #agent = TDL.DoubleQLearning(nStates, nActions, alpha, gamma, epsilon=policy_epsilon)
+        __observation_space_nums = __get_observation_space_num(env=env, states_list=states_list)
+        if (not (q_table is None)):
+            agent.actionValueTable = q_table
+            logger.info('USE GIVEN Q-TABLE')
+
+        __reward_sums, __evst, __actionValueTable_history, stats = _runExperiment_NStep(agent_nEpisodes=agent_nEpisodes, env=env, agent=agent, states_list=states_list, observation_space_num=__observation_space_nums)
+        logger.info('Results of hyper parameter: alpha=%.2f, gamma=%.2f, epsilon=%.2f', alpha, gamma, policy_epsilon)
+        logger.info('Training Statistics: Avg Steps = %.2f, Avg Reward = %.2f, Goal Rate = %.2f%%',
+                    stats['avg_steps'], stats['avg_reward'], stats['goal_rate'])
+        return stats['goal_rate']
+
+def noise_sensors(state, noiseConf):
+    state[0]=state[0]+random.randint(noiseConf['west'][0], noiseConf['west'][1])
+    state[1]=state[1]+random.randint(noiseConf['north'][0], noiseConf['north'][1])
+    state[2]=state[2]+random.randint(noiseConf['ost'][0], noiseConf['ost'][1])
+    return state
+    
 ################################################################
 ###                          M A I N                         ###
 ################################################################
              
 if __name__ == '__main__':
     ROOT_FILE_PATH = "../model_storage/"
-
     current_datetimestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     if not os.path.exists(ROOT_FILE_PATH + current_datetimestamp):
         os.makedirs(ROOT_FILE_PATH + current_datetimestamp)
     CURRENT_FILE_PATH = ROOT_FILE_PATH + current_datetimestamp + "/"
 
+    
     # logger config
     # https://docs.python.org/3/library/logging.html#logrecord-attributes   
     logger = logger.createLogger(config="../logging.conf.json", logger_name="__main__", logfile=CURRENT_FILE_PATH + 'logfile.log')
@@ -473,7 +526,8 @@ if __name__ == '__main__':
     TRAIN_MODEL = True
     RETRAIN_MODEL = True
     TEST_MODEL = True
-    RUN_MODEL = True  
+    RUN_MODEL = True
+    OPTIMIZE = False
 
     # manual path
     #CURRENT_FILE_PATH = ""
@@ -512,8 +566,9 @@ if __name__ == '__main__':
 
     agent_exerciseID = 0
     agent_nExperiments = 1
-    agent_nEpisodes = 10000
+    agent_nEpisodes = 500
 
+    n_trials=50
     # Agent
     agent_alpha = 0.1
     agent_gamma = 0.9
@@ -524,17 +579,28 @@ if __name__ == '__main__':
     policy_epsilon = 0.1
 
     #env.render()
-    
+
+
     # Agent
     agent = TDL.SARSA(nStates, nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon)
-    #agent = TDL.nStepTreeBackup(nStates, nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon, n=agent_n_steps)
+#    agent = TDL.QLearning(nStates, nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon)
+#    agent = TDL.DoubleQLearning(nStates, nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon)
+#    agent = TDL.nStepTreeBackup(nStates, nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon, n=agent_n_steps)
     logger.info('AGENT \'%s\' SELECTED', str(agent.getName()))
 
     file_prefix = ''
     file_suffix = '_' + agent.getName() + '_' + current_datetimestamp
 
-    ######################### AGENT TRAIN #########################
+    ######################### HYPERPARAMETER OPTIMIZATION #########################
+    if (OPTIMIZE):
+        logger.info('OPTIMIZE PARAMETER [%s]', str(CURRENT_FILE_PATH))
+        objective = partial(optimize_params, env=env, nStates=nStates, states_list=states_list)
+        study = optuna.create_study()
+        study.optimize(objective, n_trials=n_trials, show_progress_bar=True)
+        np.save(CURRENT_FILE_PATH + file_prefix + 'optimized-params' + file_suffix + '.npy', study.best_params)
+        logger.info('FINISH TRAINING OF AGENT')
 
+    ######################### AGENT TRAIN #########################
     if (TRAIN_MODEL):
         logger.info('TRAIN AGENT [%s]', str(CURRENT_FILE_PATH))
         train_model(env=env, agent=agent, file_path=CURRENT_FILE_PATH, file_prefix=file_prefix, file_suffix=file_suffix, states_list=states_list)
