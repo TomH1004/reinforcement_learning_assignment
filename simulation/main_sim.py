@@ -534,12 +534,12 @@ if __name__ == '__main__':
 
     ######################### ENVIRONMENT #########################
 
-    #MAP = './sim_world/race_tracks/1.PNG'
-    #MAP_START_COORDINATES = (90, 550)
-    #MAP_CHECK_POINT_LIST= [(290, 550), (670, 250), (1210, 160)]
-    MAP = './sim_world/open_world/3.PNG'
-    MAP_START_COORDINATES = (52, 180)
-    MAP_CHECK_POINT_LIST= [(70, 260), (280, 360), (800, 160) , (1200, 160)]
+    MAP = './sim_world/race_tracks/1.PNG'
+    MAP_START_COORDINATES = (90, 550)
+    MAP_CHECK_POINT_LIST= [(290, 550), (670, 250), (1210, 160)]
+    # MAP = './sim_world/open_world/3.PNG'
+    # MAP_START_COORDINATES = (52, 180)
+    # MAP_CHECK_POINT_LIST= [(70, 260), (280, 360), (800, 160) , (1200, 160)]
 
     CAR_ENERGY_START = 2000
     CAR_ENERGY_MAX = 2000
@@ -613,6 +613,7 @@ if __name__ == '__main__':
     if (RETRAIN_MODEL):
         q_data_file = CURRENT_FILE_PATH + file_prefix + 'q-table' + file_suffix
         rewards_file = CURRENT_FILE_PATH + file_prefix + 'reward_sums' + file_suffix
+        agent.update_epsilon(0)
         # manual path
         #q_data_file = ""
         #rewards_file= ""
