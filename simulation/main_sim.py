@@ -488,11 +488,11 @@ if __name__ == "__main__":
     ###############################################################
     ############################ SETUP ############################
 
-    TRAIN_MODEL = False
-    RETRAIN_MODEL = False
-    TEST_MODEL = False
-    RUN_MODEL = False
-    OPTIMIZE = True
+    TRAIN_MODEL = True
+    RETRAIN_MODEL = True
+    TEST_MODEL = True
+    RUN_MODEL = True
+    OPTIMIZE = False
 
     noiseConf = {"north": [0, 0], "west": [0, 0], "ost": [0, 0]}
     noiseBlueConf = {"north": [-5, 1], "west": [-1, 1], "ost": [0, 1]}
@@ -507,19 +507,21 @@ if __name__ == "__main__":
     # MAP_CHECK_POINT_LIST= [(290, 550), (670, 250), (1210, 160)]
     MAP = "./sim_world/open_world/3.PNG"
     MAP_START_COORDINATES = (52, 180)
-    MAP_CHECK_POINT_LIST = [(70, 260), (280, 360), (800, 160), (1200, 160)]
+#    MAP_CHECK_POINT_LIST = [(70, 260), (280, 360), (800, 160), (1200, 160)]
+    MAP_CHECK_POINT_LIST = [(70, 260), (280, 360), (800, 160), (1200, 160), (925, 560), (500, 560), (60, 560)]
     CAR_ENERGY_START = 2000
     CAR_ENERGY_MAX = 2000
 
     # States & Actions
     
-    nStates = [27,125,343]        # 3*3*3, 5*5*5, 7*7*7
+    nStates = [27,125,343,729]        # 3*3*3, 5*5*5, 7*7*7
     # states_list = [['west'], ['north'], ['east']]
     # states_list = [[0, 1, 2], [0, 1, 2], [0, 1, 2]]
     states_list = [
         [[0, 1, 2], [0, 1, 2], [0, 1, 2]],
         [[0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4]],
         [[0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6]],
+        [[0, 1, 2, 3, 4, 5, 6, 7, 8], [0, 1, 2, 3, 4, 5, 6, 7, 8], [0, 1, 2, 3, 4, 5, 6, 7, 8]],
     ]
     actions_dict = {
         0: {'speed' : 20, 'energy' : -2},
