@@ -488,11 +488,11 @@ if __name__ == "__main__":
     ###############################################################
     ############################ SETUP ############################
 
-    TRAIN_MODEL = True
-    RETRAIN_MODEL = True
-    TEST_MODEL = True
-    RUN_MODEL = True
-    OPTIMIZE = False
+    TRAIN_MODEL = False
+    RETRAIN_MODEL = False
+    TEST_MODEL = False
+    RUN_MODEL = False
+    OPTIMIZE = True
 
     noiseConf = {"north": [0, 0], "west": [0, 0], "ost": [0, 0]}
     noiseBlueConf = {"north": [-5, 1], "west": [-1, 1], "ost": [0, 1]}
@@ -513,7 +513,7 @@ if __name__ == "__main__":
 
     # States & Actions
     
-    nStates = 125        # 5*5*5
+    nStates = [27,125,343]        # 3*3*3, 5*5*5, 7*7*7
     # states_list = [['west'], ['north'], ['east']]
     # states_list = [[0, 1, 2], [0, 1, 2], [0, 1, 2]]
     states_list = [
@@ -557,9 +557,9 @@ if __name__ == "__main__":
 
     # Agent
     agent = [
-        TDL.SARSA(nStates, nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon),
-        TDL.QLearning(nStates, nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon),
-        TDL.DoubleQLearning(nStates, nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon)
+        TDL.SARSA(nStates[states_listIdx], nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon),
+        TDL.QLearning(nStates[states_listIdx], nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon),
+        TDL.DoubleQLearning(nStates[states_listIdx], nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon)
     ]
     logger.info("AGENT '%s' SELECTED", str(agent[agentIdx].getName()))
     file_prefix = "world3"
@@ -571,7 +571,7 @@ if __name__ == "__main__":
         objective = partial(
             optimize_params,
             env=env,
-            nStates=nStates,
+            nStates=nStates[states_listIdx],
             agent_n_steps=agent_n_steps,
             states_list=states_list[states_listIdx],
         )
