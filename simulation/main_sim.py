@@ -3,7 +3,8 @@ import sys
 import os
 
 from datetime import datetime
-import logging, logging.config
+import logging
+import logging.config
 import logger
 import json
 
@@ -14,9 +15,13 @@ from sim_world.envs.car_0.ev3_sim_car import SimCar as Car
 from sim_world.envs.pygame_0.ev3_sim_pygame_2d_V2 import PyGame2D as Simulation
 import optuna
 import random
+from preprocess import DiscretizeHelper as DH
+
 # only for lecturer otherwise comment out the following line
-#path_to_main = ".\student\simulation"
+# path_to_main = ".\student\simulation"
 path_to_main = ".\simulation"
+
+
 
 os.chdir(os.getcwd() + path_to_main)
 
@@ -51,7 +56,7 @@ def run_model(env, policy, states_list):
     while (__done == False):
         total_steps += 1
         # preprocessing of the measured values
-        __preprocessed_state = preprocessing_observations(observations=__state, states_list=states_list)
+        __preprocessed_state = pp.preprocess(observations=__state, states_list=states_list[states_listIdx])
 
         # select the best action; based on state
         __action = greedy(policy=policy, state=__preprocessed_state)
@@ -69,56 +74,6 @@ def greedy(policy, state):
     '''
     __key = str(state[0]) + ' ' + str(state[1]) + ' ' + str(state[2])
     return policy[__key]
-
-
-# Parallel to this method, there is a method in reinforcement_learning_assignment\robot\ev3\main_robot_micpy.py
-def preprocessing_observations(observations, states_list):
-    # states_list = [['west'], ['north'], ['east']] 
-    __car_X = 50
-    __car_size = 24 # cm
-    __resize_factor = __car_X / __car_size
-    __obs_discrete = []
-
-    for __observation in observations:
-        if (__observation < ((__car_size * __resize_factor) * 1.8)):
-            # obstacle detected
-            __value = states_list[1][1]
-            if (__observation < ((__car_size * __resize_factor) * 0.6)):
-                # close obstacle detected
-                __value = states_list[1][0]
-        else:
-            # no obstacle detected
-            __value = states_list[1][2]
-        __obs_discrete.append(__value)   
-    logger.debug('OBSERVATION DISCRETE \'%s\'', str(__obs_discrete))
-    return __obs_discrete
-
-def preprocessing_observations_5(observations, states_list):
-    # states_list = [['west'], ['north'], ['east']] 
-    __car_X = 50
-    __car_size = 24 # cm
-    __resize_factor = __car_X / __car_size
-    __obs_discrete = []
-
-    for __observation in observations:
-        if (__observation < (5 +(__car_size * __resize_factor))):
-            # obstacle detected
-            __value = states_list[1][0]
-        elif (__observation < (10 + (__car_size * __resize_factor))):
-                # close obstacle detected
-                __value = states_list[1][1]
-        elif (__observation < (15 + (__car_size * __resize_factor))):
-                # obstacle detected
-                __value = states_list[1][2]
-        elif (__observation < (20 + (__car_size * __resize_factor))):
-                # obstacle detected
-                __value = states_list[1][3]        
-        else:
-            # no obstacle detected
-            __value = states_list[1][4]
-        __obs_discrete.append(__value)   
-    logger.debug('OBSERVATION DISCRETE \'%s\'', str(__obs_discrete))
-    return __obs_discrete
 
 
 def train_model(env, agent, states_list, file_path, file_prefix, file_suffix, q_table=None):
@@ -184,18 +139,6 @@ def _runExperiment_NStep(agent_nEpisodes, env, agent, states_list, observation_s
   __reward_sums = []
   __episodesvstimesteps = []
   __actionValueTable_history = []
-  
-  noiseDefaultConf = {
-      'north': [0,0],
-      'west': [0,0],
-      'ost': [0,0]
-  }
-  noiseBlueConf = {
-      'north': [-5,1],
-      'west': [-1,1],
-      'ost': [0,1]
-  }
-  
   total_steps = 0
   total_rewards = 0
   goals_reached = 0
@@ -208,11 +151,12 @@ def _runExperiment_NStep(agent_nEpisodes, env, agent, states_list, observation_s
     __state = env.reset()
 
     # bring noice in data
-    __state = noise_sensors(__state, noiseDefaultConf)
+    __state = noise_sensors(__state, noiseConf)
 
-    #__state = preprocessing_observations(observations=__state, states_list=states_list)
+    # __state = preprocessing_observations(observations=__state, states_list=states_list)
     # preprocessing of the measured values (uses 5 states for north, ost and west)
-    __state = preprocessing_observations_5(observations=__state, states_list=states_list)
+    # method preprocess() automatically select preprocess method dependend from states_list
+    __state = pp.preprocess(observations=__state, states_list=states_list)
 
     # transform to 1d-coodinates
     __state = __convert_3d_to_1d(state_3d=__state, observation_space_num=observation_space_num)
@@ -228,15 +172,19 @@ def _runExperiment_NStep(agent_nEpisodes, env, agent, states_list, observation_s
       
       __new_state, __reward, __done, __info = env.step(__action)
       # bring noise to data
-      __new_state = noise_sensors(__new_state, noiseDefaultConf)
+      __new_state = noise_sensors(__new_state, noiseConf)
       # preprocessing of the measured values
-      #__new_state = preprocessing_observations(observations=__new_state, states_list=states_list)
-      __new_state = preprocessing_observations_5(observations=__new_state, states_list=states_list)
+      # __new_state = pp.preprocessing_observations(observations=__new_state, states_list=states_list)
+      __new_state = pp.preprocess(observations=__new_state, states_list=states_list)
       # transform to 1d-coodinates
-      __new_state = __convert_3d_to_1d(state_3d=__new_state, observation_space_num=observation_space_num)   
+      __new_state = __convert_3d_to_1d(state_3d=__new_state, observation_space_num=observation_space_num)
+
+      # Reduce epsilon until zero
+      if hasattr(agent.policy, "epsilon"):
+          agent.policy.epsilon *= epsilon_decay
 
       __new_action = agent.selectAction(__new_state)
-      
+
       __xp = {}
       __xp['state'] = __new_state
       __xp['reward'] = __reward
@@ -318,11 +266,11 @@ def _test_q_table(q_table, env, states_list, agent_nEpisodes):
       __state = env.reset()
 
       # preprocessing of the measured values
-      __state = preprocessing_observations(observations=__state, states_list=states_list)
+      __state = pp.preprocess(observations=__state, states_list=states_list)
 
       __q_table_index = __convert_3d_to_1d(state_3d=__state, observation_space_num=__observation_space_nums)
-      #__action = agent.selectAction(__state)
-      __action = np.argmax(q_table[__q_table_index]) 
+      # __action = agent.selectAction(__state)
+      __action = np.argmax(q_table[__q_table_index])
       __done = False
       __reward_sums.append(0.0)
       while (not __done):
@@ -336,7 +284,7 @@ def _test_q_table(q_table, env, states_list, agent_nEpisodes):
           __new_state, __reward, __done, __info = env.step(__action)
 
           # preprocessing of the measured values
-          __new_state = preprocessing_observations(observations=__new_state, states_list=states_list)
+          __new_state = pp.preprocess(observations=__new_state, states_list=states_list)
 
           # transform to 1d-coodinates
           __new_state = __convert_3d_to_1d(state_3d=__new_state, observation_space_num=__observation_space_nums)
@@ -478,13 +426,19 @@ def optimize_params(trial, env, nStates, states_list, q_table=None):
             file_suffix (strings): #TODO
             q_table (np.array, optional): q_table used for init. Defaults to None.
         """
-        alpha = trial.suggest_float("alpha", 0.1, 0.2)
-        gamma = trial.suggest_float("gamma", 0.7, 0.9)
-        policy_epsilon = trial.suggest_float("epsilon", 0.1, 0.3)
-        logger.info('New set of new hyper parameter: alpha=%.2f, gamma=%.2f, epsilon=%.2f', alpha, gamma, policy_epsilon)
-        agent = TDL.SARSA(nStates, nActions, alpha, gamma, epsilon=policy_epsilon)
-        #agent = TDL.QLearning(nStates, nActions, alpha, gamma, epsilon=policy_epsilon)
-        #agent = TDL.DoubleQLearning(nStates, nActions, alpha, gamma, epsilon=policy_epsilon)
+        alpha = trial.suggest_categorical("alpha", [0.01, 0.05, 0.1, 0.2, 0.3])
+        gamma = trial.suggest_categorical("gamma", [0.8, 0.85, 0.9, 0.95, 0.99])
+        logger.info("New set of hyper parameter: alpha=%.2f, gamma=%.2f, epsilon=%.2f", alpha, gamma, policy_epsilon)
+        if agentIdx == 0:
+            agent = TDL.SARSA(nStates, nActions, alpha,
+                            gamma, epsilon=policy_epsilon)
+        elif agentIdx == 1:
+            agent = TDL.QLearning(nStates, nActions, alpha,
+                                gamma, epsilon=policy_epsilon)
+        elif agentIdx == 2:
+            agent = TDL.DoubleQLearning(
+                nStates, nActions, alpha, gamma, epsilon=policy_epsilon
+            )
         __observation_space_nums = __get_observation_space_num(env=env, states_list=states_list)
         if (not (q_table is None)):
             agent.actionValueTable = q_table
@@ -505,8 +459,19 @@ def noise_sensors(state, noiseConf):
 ################################################################
 ###                          M A I N                         ###
 ################################################################
-             
-if __name__ == '__main__':
+
+if __name__ == "__main__":
+
+    ### get commandline parameters: 1st arg: agent; 2nd arg state_list ###
+    agentIdx = 0
+    states_listIdx = 1
+    args = sys.argv[1:]
+    if len(args) == 1:
+        agentIdx = int(args[0])
+    if len(args) == 2:
+        agentIdx = int(args[0])
+        states_listIdx = int(args[1])
+
     ROOT_FILE_PATH = "../model_storage/"
     current_datetimestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     if not os.path.exists(ROOT_FILE_PATH + current_datetimestamp):
@@ -519,7 +484,7 @@ if __name__ == '__main__':
     logger = logger.createLogger(config="../logging.conf.json", logger_name="__main__", logfile=CURRENT_FILE_PATH + 'logfile.log')
 
     logger.info('START SIMULATION')
-    
+    pp = DH(logger)
     ###############################################################
     ############################ SETUP ############################
 
@@ -529,18 +494,20 @@ if __name__ == '__main__':
     RUN_MODEL = True
     OPTIMIZE = False
 
+    noiseConf = {"north": [0, 0], "west": [0, 0], "ost": [0, 0]}
+    noiseBlueConf = {"north": [-5, 1], "west": [-1, 1], "ost": [0, 1]}
+
     # manual path
-    #CURRENT_FILE_PATH = ""
+    # CURRENT_FILE_PATH = ""
 
     ######################### ENVIRONMENT #########################
 
-    #MAP = './sim_world/race_tracks/1.PNG'
-    #MAP_START_COORDINATES = (90, 550)
-    #MAP_CHECK_POINT_LIST= [(290, 550), (670, 250), (1210, 160)]
-    MAP = './sim_world/open_world/3.PNG'
+    # MAP = './sim_world/race_tracks/1.PNG'
+    # MAP_START_COORDINATES = (90, 550)
+    # MAP_CHECK_POINT_LIST= [(290, 550), (670, 250), (1210, 160)]
+    MAP = "./sim_world/open_world/3.PNG"
     MAP_START_COORDINATES = (52, 180)
-    MAP_CHECK_POINT_LIST= [(70, 260), (280, 360), (800, 160) , (1200, 160)]
-
+    MAP_CHECK_POINT_LIST = [(70, 260), (280, 360), (800, 160), (1200, 160)]
     CAR_ENERGY_START = 2000
     CAR_ENERGY_MAX = 2000
 
@@ -548,8 +515,12 @@ if __name__ == '__main__':
     
     nStates = 125        # 5*5*5
     # states_list = [['west'], ['north'], ['east']]
-    #states_list = [[0, 1, 2], [0, 1, 2], [0, 1, 2]]
-    states_list = [[0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4]]
+    # states_list = [[0, 1, 2], [0, 1, 2], [0, 1, 2]]
+    states_list = [
+        [[0, 1, 2], [0, 1, 2], [0, 1, 2]],
+        [[0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4]],
+        [[0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6]],
+    ]
     actions_dict = {
         0: {'speed' : 20, 'energy' : -2},
         1: {'angle' : -45, 'energy' : -15},
@@ -571,7 +542,7 @@ if __name__ == '__main__':
     agent_nExperiments = 1
     agent_nEpisodes = 500
 
-    n_trials=50
+    n_trials = 50
     # Agent
     agent_alpha = 0.1 # 0.1
     agent_gamma = 0.9 # 0.9
@@ -580,33 +551,53 @@ if __name__ == '__main__':
     # Policy
     policy_epsilon = 0.1
 
-    #env.render()
+    epsilon_decay = 0.9
 
+    # env.render()
 
     # Agent
-    agent = TDL.SARSA(nStates, nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon)
-#    agent = TDL.QLearning(nStates, nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon)
-#    agent = TDL.DoubleQLearning(nStates, nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon)
-#    agent = TDL.nStepTreeBackup(nStates, nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon, n=agent_n_steps)
-    logger.info('AGENT \'%s\' SELECTED', str(agent.getName()))
-
-    file_prefix = ''
-    file_suffix = '_' + agent.getName() + '_' + current_datetimestamp
+    agent = [
+        TDL.SARSA(nStates, nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon),
+        TDL.QLearning(nStates, nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon),
+        TDL.DoubleQLearning(nStates, nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon)
+    ]
+    logger.info("AGENT '%s' SELECTED", str(agent[agentIdx].getName()))
+    file_prefix = "world3"
+    file_suffix = "_" + agent[agentIdx].getName() + "_" + current_datetimestamp
 
     ######################### HYPERPARAMETER OPTIMIZATION #########################
-    if (OPTIMIZE):
-        logger.info('OPTIMIZE PARAMETER [%s]', str(CURRENT_FILE_PATH))
-        objective = partial(optimize_params, env=env, nStates=nStates, states_list=states_list)
-        study = optuna.create_study()
-        study.optimize(objective, n_trials=n_trials, show_progress_bar=True)
-        np.save(CURRENT_FILE_PATH + file_prefix + 'optimized-params' + file_suffix + '.npy', study.best_params)
-        logger.info('FINISH TRAINING OF AGENT')
+    if OPTIMIZE:
+        logger.info("OPTIMIZE PARAMETER [%s]", str(CURRENT_FILE_PATH))
+        objective = partial(
+            optimize_params,
+            env=env,
+            nStates=nStates,
+            agent_n_steps=agent_n_steps,
+            states_list=states_list[states_listIdx],
+        )
+        search_space = {"alpha": [0.01, 0.05, 0.1, 0.2,
+                                  0.3], "gamma": [0.8, 0.85, 0.9, 0.95, 0.99]}
+        study = optuna.create_study(
+            sampler=optuna.samplers.GridSampler(search_space))
+        study.optimize(objective, show_progress_bar=True)
+        np.save(
+            CURRENT_FILE_PATH + file_prefix + "optimized-params" + file_suffix + ".npy",
+            [study.best_params, study.best_value],
+        )
+        # Set optimized paramter for traininig
+        if hasattr(agent, "alpha"):
+            agent.alpha = study.best_params["alpha"]
+            logger.info("Set hyper parameter: alpha=%.2f", agent.alpha)
+        if hasattr(agent, "gamma"):
+            agent.gamma = study.best_params["gamma"]
+            logger.info("Set hyper parameter: gamma=%.2f", agent.gamma)
+        logger.info("FINISHED OPTIMIZING")
 
     ######################### AGENT TRAIN #########################
     if (TRAIN_MODEL):
-        logger.info('TRAIN AGENT [%s]', str(CURRENT_FILE_PATH))
-        train_model(env=env, agent=agent, file_path=CURRENT_FILE_PATH, file_prefix=file_prefix, file_suffix=file_suffix, states_list=states_list)
-        logger.info('FINISH TRAINING OF AGENT')
+        logger.info("TRAIN AGENT [%s]", str(CURRENT_FILE_PATH))
+        train_model(env=env, agent=agent[agentIdx], file_path=CURRENT_FILE_PATH, file_prefix=file_prefix, file_suffix=file_suffix, states_list=states_list[states_listIdx])
+        logger.info("FINISH TRAINING OF AGENT")
 
     ######################### AGENT TRAIN #########################
 
@@ -624,15 +615,15 @@ if __name__ == '__main__':
         q_data = read_numpy_data(numpy_file=q_data_file)
 
         logger.info('RETRAIN AGENT WITH \'%s\' [%s]', str(q_data_file), str(CURRENT_FILE_PATH))
-        train_model(env=env, agent=agent, states_list=states_list, file_path=CURRENT_FILE_PATH, file_prefix=file_prefix, file_suffix=file_suffix, q_table=q_data)
+        train_model(env=env, agent=agent[agentIdx], states_list=states_list[states_listIdx], file_path=CURRENT_FILE_PATH, file_prefix=file_prefix, file_suffix=file_suffix, q_table=q_data)
         logger.info('FINISH RETRAINING OF AGENT')
 
     ######################### AGENT TEST ##########################
 
     if (TEST_MODEL):
-        logger.info('TEST AGENT [%s]', str(CURRENT_FILE_PATH))
-        test_model(env=env, agent=agent, states_list=states_list, file_path=CURRENT_FILE_PATH, file_prefix=file_prefix, file_suffix=file_suffix)
-        logger.info('FINISH TESTING OF AGENT')
+        logger.info("TEST AGENT [%s]", str(CURRENT_FILE_PATH))
+        test_model(env=env, agent=agent[agentIdx], states_list=states_list[states_listIdx], file_path=CURRENT_FILE_PATH, file_prefix=file_prefix, file_suffix=file_suffix)
+        logger.info("FINISH TESTING OF AGENT")
 
     ######################### AGENT RUN ###########################
 
