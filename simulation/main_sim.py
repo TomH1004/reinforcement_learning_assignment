@@ -540,7 +540,7 @@ if __name__ == "__main__":
 
     agent_exerciseID = 0
     agent_nExperiments = 1
-    agent_nEpisodes = 500
+    agent_nEpisodes = 100
 
     n_trials = 50
     # Agent
@@ -604,7 +604,8 @@ if __name__ == "__main__":
     if (RETRAIN_MODEL):
         q_data_file = CURRENT_FILE_PATH + file_prefix + 'q-table' + file_suffix
         rewards_file = CURRENT_FILE_PATH + file_prefix + 'reward_sums' + file_suffix
-        agent.update_epsilon(0)
+        if hasattr(agent[agentIdx].policy, "epsilon"):
+          agent[agentIdx].policy.epsilon = 0
         # manual path
         #q_data_file = ""
         #rewards_file= ""
