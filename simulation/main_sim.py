@@ -556,14 +556,16 @@ if __name__ == "__main__":
     # env.render()
 
     # Agent
-    agent = [
+    agents = [
         TDL.SARSA(nStates[states_listIdx], nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon),
         TDL.QLearning(nStates[states_listIdx], nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon),
         TDL.DoubleQLearning(nStates[states_listIdx], nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon)
     ]
-    logger.info("AGENT '%s' SELECTED", str(agent[agentIdx].getName()))
+
+    agent = agents[agentIdx]
+    logger.info("AGENT '%s' SELECTED", str(agent.getName()))
     file_prefix = "world3"
-    file_suffix = "_" + agent[agentIdx].getName() + "_" + current_datetimestamp
+    file_suffix = "_" + agent.getName() + "_" + current_datetimestamp
 
     ######################### HYPERPARAMETER OPTIMIZATION #########################
     if OPTIMIZE:
@@ -572,15 +574,14 @@ if __name__ == "__main__":
             optimize_params,
             env=env,
             nStates=nStates[states_listIdx],
-            agent_n_steps=agent_n_steps,
             states_list=states_list[states_listIdx],
         )
         search_space = {"alpha": [0.01, 0.05, 0.1, 0.2,
                                   0.3], "gamma": [0.8, 0.85, 0.9, 0.95, 0.99]}
-        study = optuna.create_study(
+        study = optuna.create_study(direction="maximize",
             sampler=optuna.samplers.GridSampler(search_space))
         study.optimize(objective, show_progress_bar=True)
-        np.save(
+        opt_params = np.save(
             CURRENT_FILE_PATH + file_prefix + "optimized-params" + file_suffix + ".npy",
             [study.best_params, study.best_value],
         )
@@ -596,7 +597,7 @@ if __name__ == "__main__":
     ######################### AGENT TRAIN #########################
     if (TRAIN_MODEL):
         logger.info("TRAIN AGENT [%s]", str(CURRENT_FILE_PATH))
-        train_model(env=env, agent=agent[agentIdx], file_path=CURRENT_FILE_PATH, file_prefix=file_prefix, file_suffix=file_suffix, states_list=states_list[states_listIdx])
+        train_model(env=env, agent=agent, file_path=CURRENT_FILE_PATH, file_prefix=file_prefix, file_suffix=file_suffix, states_list=states_list[states_listIdx])
         logger.info("FINISH TRAINING OF AGENT")
 
     ######################### AGENT TRAIN #########################
@@ -604,8 +605,8 @@ if __name__ == "__main__":
     if (RETRAIN_MODEL):
         q_data_file = CURRENT_FILE_PATH + file_prefix + 'q-table' + file_suffix
         rewards_file = CURRENT_FILE_PATH + file_prefix + 'reward_sums' + file_suffix
-        if hasattr(agent[agentIdx].policy, "epsilon"):
-          agent[agentIdx].policy.epsilon = 0
+        if hasattr(agent.policy, "epsilon"):
+          agent.policy.epsilon = 0
         # manual path
         #q_data_file = ""
         #rewards_file= ""
@@ -617,14 +618,14 @@ if __name__ == "__main__":
         q_data = read_numpy_data(numpy_file=q_data_file)
 
         logger.info('RETRAIN AGENT WITH \'%s\' [%s]', str(q_data_file), str(CURRENT_FILE_PATH))
-        train_model(env=env, agent=agent[agentIdx], states_list=states_list[states_listIdx], file_path=CURRENT_FILE_PATH, file_prefix=file_prefix, file_suffix=file_suffix, q_table=q_data)
+        train_model(env=env, agent=agent, states_list=states_list[states_listIdx], file_path=CURRENT_FILE_PATH, file_prefix=file_prefix, file_suffix=file_suffix, q_table=q_data)
         logger.info('FINISH RETRAINING OF AGENT')
 
     ######################### AGENT TEST ##########################
 
     if (TEST_MODEL):
         logger.info("TEST AGENT [%s]", str(CURRENT_FILE_PATH))
-        test_model(env=env, agent=agent[agentIdx], states_list=states_list[states_listIdx], file_path=CURRENT_FILE_PATH, file_prefix=file_prefix, file_suffix=file_suffix)
+        test_model(env=env, agent=agent, states_list=states_list[states_listIdx], file_path=CURRENT_FILE_PATH, file_prefix=file_prefix, file_suffix=file_suffix)
         logger.info("FINISH TESTING OF AGENT")
 
     ######################### AGENT RUN ###########################
