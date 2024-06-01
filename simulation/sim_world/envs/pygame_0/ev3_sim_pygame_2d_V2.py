@@ -48,6 +48,7 @@ class PyGame2D:
         self._map_check_flag = False
         self._map_goal_reached = False
         self._car.set_start_position(self._car_start_pos)
+        self._reached_checkpoints.clear()
 
     def _check_collision(self):
         """check if the Car hitbox touches obstacle pixels
@@ -155,25 +156,19 @@ class PyGame2D:
         if self._car._is_crashed:
             reward -= 2000
 
-        # Large negative reward if energy is depleted (evaluated at each step)
-        if self._car.energy <= 0:
-            reward -= 1000
-
         # Additional reward for reaching the final checkpoint (evaluated at each step)
         if self._map_goal_reached:
             reward += 5000  # Additional reward for completing all checkpoints
 
         # Penalty for energy consumption (evaluated at each step)
-        energy_penalty = (self._car.energy_max - self._car.energy) * 0.02
-        reward -= energy_penalty
+        reward -= 5
 
         # Reward for moving away from the start point (evaluated at each step)
         last_action_index = self._car._last_action
         if last_action_index in self._car.actions_dict:
             action = self._car.actions_dict[last_action_index]
             if 'speed' in action:
-                distance_from_start = self._get_distance(self._car._center, self._car_start_pos)
-                reward += 0.05 * distance_from_start  # Adjust the multiplier as needed
+                reward += 5  # Adjust the multiplier as needed
 
         # Negative reward for turning too much (evaluated at each step)
         last_action_index = self._car._last_action
