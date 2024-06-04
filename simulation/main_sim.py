@@ -14,6 +14,8 @@ from sim_world.envs.car_0.ev3_sim_car import SimCar as Car
 from sim_world.envs.pygame_0.ev3_sim_pygame_2d_V2 import PyGame2D as Simulation
 import optuna
 import random
+from sim_world.maps_config import get_map_config
+
 # only for lecturer otherwise comment out the following line
 #path_to_main = ".\student\simulation"
 path_to_main = ".\simulation"
@@ -534,15 +536,17 @@ if __name__ == '__main__':
 
     ######################### ENVIRONMENT #########################
 
-    MAP = './sim_world/race_tracks/1.PNG'
-    MAP_START_COORDINATES = (90, 550)
-    MAP_CHECK_POINT_LIST= [(290, 550), (670, 250), (1210, 160)]
-    # MAP = './sim_world/open_world/3.PNG'
-    # MAP_START_COORDINATES = (52, 180)
-    # MAP_CHECK_POINT_LIST= [(70, 260), (280, 360), (800, 160) , (1200, 160)]
+    config = get_map_config("race3")
+    if config:
+        MAP = config["path"]
+        MAP_START_COORDINATES = config["start_coordinates"]
+        MAP_CHECK_POINT_LIST = config["check_point_list"]
+    else:
+        logger.error("Map config not found")
+        sys.exit(1)
 
-    CAR_ENERGY_START = 2000
-    CAR_ENERGY_MAX = 2000
+    CAR_ENERGY_START = 3000
+    CAR_ENERGY_MAX = 3000
 
     # States & Actions
     
