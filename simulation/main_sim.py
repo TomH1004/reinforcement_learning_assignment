@@ -56,7 +56,7 @@ def run_model(env, policy, states_list):
     while (__done == False):
         total_steps += 1
         # preprocessing of the measured values
-        __preprocessed_state = pp.preprocess(observations=__state, states_list=states_list[states_listIdx])
+        __preprocessed_state = pp.preprocess(observations=__state, states_list=states_list)
 
         # select the best action; based on state
         __action = greedy(policy=policy, state=__preprocessed_state)
@@ -448,7 +448,7 @@ def optimize_params(trial, env, nStates, states_list, q_table=None):
         logger.info('Results of hyper parameter: alpha=%.2f, gamma=%.2f, epsilon=%.2f', alpha, gamma, policy_epsilon)
         logger.info('Training Statistics: Avg Steps = %.2f, Avg Reward = %.2f, Goal Rate = %.2f%%',
                     stats['avg_steps'], stats['avg_reward'], stats['goal_rate'])
-        return stats['goal_rate']
+        return stats['avg_reward'], stats['goal_rate']
 
 def noise_sensors(state, noiseConf):
     state[0]=state[0]+random.randint(noiseConf['west'][0], noiseConf['west'][1])
@@ -580,22 +580,25 @@ if __name__ == "__main__":
         )
         search_space = {"alpha": [0.01, 0.05, 0.1, 0.2,
                                   0.3], "gamma": [0.8, 0.85, 0.9, 0.95, 0.99]}
-        study = optuna.create_study(direction="maximize",
+        study = optuna.create_study(directions=["maximize","maximize"],
             sampler=optuna.samplers.GridSampler(search_space))
         study.optimize(objective, show_progress_bar=True)
-        opt_params = np.save(
-            CURRENT_FILE_PATH + file_prefix + "optimized-params" + file_suffix + ".npy",
-            [study.best_params, study.best_value],
-        )
-        # Set optimized paramter for traininig
-        if hasattr(agent, "alpha"):
-            agent.alpha = study.best_params["alpha"]
-            logger.info("Set hyper parameter: alpha=%.2f", agent.alpha)
-        if hasattr(agent, "gamma"):
-            agent.gamma = study.best_params["gamma"]
-            logger.info("Set hyper parameter: gamma=%.2f", agent.gamma)
-        logger.info("FINISHED OPTIMIZING")
+        try:
+            opt_params = np.save(CURRENT_FILE_PATH + file_prefix + "optimized-params" + file_suffix + ".npy",
+                [study.best_trials],
+            )
+            if hasattr(agent, "alpha"):
+                agent.alpha = study.best_params["alpha"]
+                logger.info("Set hyper parameter: alpha=%.2f", agent.alpha)
+            if hasattr(agent, "gamma"):
+                agent.gamma = study.best_params["gamma"]
+                logger.info("Set hyper parameter: gamma=%.2f", agent.gamma)
+            logger.info("FINISHED OPTIMIZING")
 
+        except RuntimeError as e:
+                logger.info("Could not find goal with parameter from search_space.")
+        # Set optimized paramter for traininig
+        
     ######################### AGENT TRAIN #########################
     if (TRAIN_MODEL):
         logger.info("TRAIN AGENT [%s]", str(CURRENT_FILE_PATH))
@@ -640,7 +643,7 @@ if __name__ == "__main__":
         logger.info('LOADING POLICY \'%s\'', str(policy_file))
         policy = load_policy(policy_as_json=policy_file)
         logger.info('RUN AGENT WITH \'%s\' [%s]', str(policy_file), str(CURRENT_FILE_PATH))
-        run_model(env=env, policy=policy, states_list=states_list)
+        run_model(env=env, policy=policy, states_list=states_list[states_listIdx])
         logger.info('FINISH RUNNING OF AGENT')
     
     ###############################################################
