@@ -428,7 +428,7 @@ def optimize_params(trial, env, nStates, states_list, q_table=None):
             file_suffix (strings): #TODO
             q_table (np.array, optional): q_table used for init. Defaults to None.
         """
-        alpha = trial.suggest_categorical("alpha", [0.01, 0.05, 0.1, 0.2, 0.3])
+        alpha = trial.suggest_categorical("alpha", [0.01, 0.05, 0.1, 0.15, 0.2])
         gamma = trial.suggest_categorical("gamma", [0.8, 0.85, 0.9, 0.95, 0.99])
         logger.info("New set of hyper parameter: alpha=%.2f, gamma=%.2f, epsilon=%.2f", alpha, gamma, policy_epsilon)
         if agentIdx == 0:
@@ -548,10 +548,9 @@ if __name__ == "__main__":
     agent_nExperiments = 1
     agent_nEpisodes = 100
 
-    n_trials = 50
     # Agent
-    agent_alpha = 0.1 # 0.1
-    agent_gamma = 0.9 # 0.9
+    agent_alpha = 0.05 # 0.1
+    agent_gamma = 0.99 # 0.9
     agent_n_steps = 5 # 5
     
     # Policy
@@ -570,7 +569,7 @@ if __name__ == "__main__":
 
     agent = agents[agentIdx]
     logger.info("AGENT '%s' SELECTED", str(agent.getName()))
-    file_prefix = "world3"
+    file_prefix = "race3-9states-"
     file_suffix = "_" + agent.getName() + "_" + current_datetimestamp
 
     ######################### HYPERPARAMETER OPTIMIZATION #########################
@@ -582,8 +581,7 @@ if __name__ == "__main__":
             nStates=nStates[states_listIdx],
             states_list=states_list[states_listIdx],
         )
-        search_space = {"alpha": [0.01, 0.05, 0.1, 0.2,
-                                  0.3], "gamma": [0.8, 0.85, 0.9, 0.95, 0.99]}
+        search_space = {"alpha": [0.01, 0.05, 0.1, 0.15, 0.2], "gamma": [0.8, 0.85, 0.9, 0.95, 0.99]}
         study = optuna.create_study(directions=["maximize","maximize"],
             sampler=optuna.samplers.GridSampler(search_space))
         study.optimize(objective, show_progress_bar=True)
