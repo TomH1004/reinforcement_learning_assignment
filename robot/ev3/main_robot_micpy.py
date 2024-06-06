@@ -71,7 +71,7 @@ def preprocessing_observations5(observations):
             __value = 2 # obstacle detected
         elif(__observation < (20 + __car_size * __resize_factor)):
             __value = 3 # obstacle detected
-        elif(__observation < (25 + __car_size * __resize_factor)):
+        else:
             __value = 4 
         __obs_discrete.append(__value)
 
