@@ -1,3 +1,4 @@
+import random
 import pygame
 import math
 import logging
@@ -178,6 +179,17 @@ class PyGame2D:
                 angle_change = abs(action['angle'])
                 reward -= 0.1 * angle_change  # Adjust the multiplier as needed
 
+        # Negative reward for to close objects -> if two sensors detect close obstacle
+        state = list(self._car.observation)
+        # Add noise to sensor before evalutation
+        noiseConf = {"north": [-5, 0], "west": [-1, 1], "ost": [-1, 1]}
+        state[0]=state[0]+random.randint(noiseConf['west'][0], noiseConf['west'][1])
+        state[1]=state[1]+random.randint(noiseConf['north'][0], noiseConf['north'][1])
+        state[2]=state[2]+random.randint(noiseConf['ost'][0], noiseConf['ost'][1])
+        if(sum([state[0]<5,state[0]<5,state[0]<5]))>=2:
+            reward -= 300
+        if(sum([state[0]<10,state[0]<10,state[0]<10]))>=2:
+            reward -= 200
         return reward
 
 

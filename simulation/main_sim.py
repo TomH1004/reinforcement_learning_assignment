@@ -496,8 +496,8 @@ if __name__ == "__main__":
     RUN_MODEL = True
     OPTIMIZE = False
 
-    noiseConf = {"north": [0, 0], "west": [0, 0], "ost": [0, 0]}
-    noiseBlueConf = {"north": [-5, 1], "west": [-1, 1], "ost": [0, 1]}
+    #noiseConf = {"north": [0, 0], "west": [0, 0], "ost": [0, 0]}
+    noiseConf = {"north": [-5, 0], "west": [-1, 1], "ost": [-1, 1]}
 
     # manual path
     # CURRENT_FILE_PATH = ""
@@ -546,7 +546,7 @@ if __name__ == "__main__":
 
     agent_exerciseID = 0
     agent_nExperiments = 1
-    agent_nEpisodes = 100
+    agent_nEpisodes = 1000
 
     # Agent
     agent_alpha = 0.05 # 0.1
@@ -569,7 +569,7 @@ if __name__ == "__main__":
 
     agent = agents[agentIdx]
     logger.info("AGENT '%s' SELECTED", str(agent.getName()))
-    file_prefix = "race3-9states-"
+    file_prefix = "race3-5states-"
     file_suffix = "_" + agent.getName() + "_" + current_datetimestamp
 
     ######################### HYPERPARAMETER OPTIMIZATION #########################
