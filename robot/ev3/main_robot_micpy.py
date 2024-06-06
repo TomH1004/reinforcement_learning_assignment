@@ -64,15 +64,15 @@ def preprocessing_observations5(observations):
     __resize_factor = 1
     for __observation in observations:
         if(__observation < (5 + __car_size * __resize_factor)):
-            __value = 1 # obstacle detected
+            __value = 0 # obstacle detected
         elif(__observation < (10 + __car_size * __resize_factor)):
-                __value = 2 # obstacle detected
+            __value = 1 # obstacle detected
         elif(__observation < (15 + __car_size * __resize_factor)):
-                __value = 3 # obstacle detected
+            __value = 2 # obstacle detected
         elif(__observation < (20 + __car_size * __resize_factor)):
-                __value = 4 # obstacle detected
-        else:
-            __value = 0 
+            __value = 3 # obstacle detected
+        elif(__observation < (25 + __car_size * __resize_factor)):
+            __value = 4 
         __obs_discrete.append(__value)
 
     return __obs_discrete
