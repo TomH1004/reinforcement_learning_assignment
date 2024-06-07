@@ -15,7 +15,7 @@ from sim_world.envs.car_0.ev3_sim_car import SimCar as Car
 from sim_world.envs.pygame_0.ev3_sim_pygame_2d_V2 import PyGame2D as Simulation
 import optuna
 import random
-from sim_world.maps_config import get_map_config
+from sim_world.maps_config import get_map_config, maps_config
 
 from preprocess import DiscretizeHelper as DH
 
@@ -149,6 +149,16 @@ def _runExperiment_NStep(agent_nEpisodes, env, agent, states_list, observation_s
     __timesteps = 0
     if (__e % 100 == 0):
       logger.info('Episode: %s', str(__e))
+
+    
+    config = setup_random_map()
+    MAP = config["path"]
+    MAP_START_COORDINATES = config["start_coordinates"]
+    MAP_CHECK_POINT_LIST = config["check_point_list"]
+
+    sim_car = Car(actions_dict=actions_dict, car_file='./sim_world/envs/Lego-Robot.png', energy=CAR_ENERGY_START, energy_max=CAR_ENERGY_MAX)
+    sim_pygame = Simulation(map_file_path=MAP, car=sim_car, start_coordinates=MAP_START_COORDINATES, checkpoints_list=MAP_CHECK_POINT_LIST)
+    env = gym.make("Robot_Simulation_Pygame-v2", pygame=sim_pygame)
       
     __state = env.reset()
 
@@ -205,7 +215,7 @@ def _runExperiment_NStep(agent_nEpisodes, env, agent, states_list, observation_s
       
       __reward_sums[-1] += __reward
 
-      if (__e % 50 == 0):
+      if (__e % 2 == 0):
           env.render()
     __episodesvstimesteps.append([__e, __timesteps])
 
@@ -457,6 +467,16 @@ def noise_sensors(state, noiseConf):
     state[1]=state[1]+random.randint(noiseConf['north'][0], noiseConf['north'][1])
     state[2]=state[2]+random.randint(noiseConf['ost'][0], noiseConf['ost'][1])
     return state
+
+
+def setup_random_map():
+    map_names = list(maps_config.keys())
+    selected_map = random.choice(map_names)
+    config = get_map_config(selected_map)
+    if not config:
+        logger.error("Map config not found for map: %s", selected_map)
+        sys.exit(1)
+    return config
     
 ################################################################
 ###                          M A I N                         ###

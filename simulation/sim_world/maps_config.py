@@ -20,12 +20,12 @@ maps_config = {
         "check_point_list": [(680, 160), (1090, 160), (400, 320), (1200, 150)]
     },
     "open3_half": {
-        "path": './open_world/3.PNG',
+        "path": './sim_world/open_world/3.PNG',
         "start_coordinates": (52, 180),
         "check_point_list": [(70, 260), (280, 360), (800, 160) , (1200, 160)]
     },
     "open3": {
-        "path": './open_world/3.PNG',
+        "path": './sim_world/open_world/3.PNG',
         "start_coordinates": (52, 180),
         "check_point_list": [(70, 260), (280, 360), (800, 160) , (1200, 160), (925, 560), (500, 560), (60, 560)]
     },
