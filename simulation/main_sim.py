@@ -274,6 +274,15 @@ def _test_q_table(q_table, env, states_list, agent_nEpisodes):
 
   for __e in range(agent_nEpisodes):
       __timesteps = 0
+
+      config = setup_random_map()
+      MAP = config["path"]
+      MAP_START_COORDINATES = config["start_coordinates"]
+      MAP_CHECK_POINT_LIST = config["check_point_list"]
+
+      sim_car = Car(actions_dict=actions_dict, car_file='./sim_world/envs/Lego-Robot.png', energy=CAR_ENERGY_START, energy_max=CAR_ENERGY_MAX)
+      sim_pygame = Simulation(map_file_path=MAP, car=sim_car, start_coordinates=MAP_START_COORDINATES, checkpoints_list=MAP_CHECK_POINT_LIST)
+      env = gym.make("Robot_Simulation_Pygame-v2", pygame=sim_pygame)
           
       __state = env.reset()
 
