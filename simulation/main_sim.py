@@ -215,7 +215,7 @@ def _runExperiment_NStep(agent_nEpisodes, env, agent, states_list, observation_s
       
       __reward_sums[-1] += __reward
 
-      if (__e % 2 == 0):
+      if (__e % 50 == 0):
           env.render()
     __episodesvstimesteps.append([__e, __timesteps])
 
