@@ -215,7 +215,7 @@ def _runExperiment_NStep(agent_nEpisodes, env, agent, states_list, observation_s
       
       __reward_sums[-1] += __reward
 
-      if (__e % 50 == 0):
+      if (__e % 100 == 0):
           env.render()
     __episodesvstimesteps.append([__e, __timesteps])
 
@@ -494,7 +494,7 @@ def setup_random_map():
 if __name__ == "__main__":
 
     ### get commandline parameters: 1st arg: agent; 2nd arg state_list ###
-    agentIdx = 0
+    agentIdx = 2
     states_listIdx = 1
     args = sys.argv[1:]
     if len(args) == 1:
@@ -575,7 +575,7 @@ if __name__ == "__main__":
 
     agent_exerciseID = 0
     agent_nExperiments = 1
-    agent_nEpisodes = 1000
+    agent_nEpisodes = 10000
 
     # Agent
     agent_alpha = 0.05 # 0.1
