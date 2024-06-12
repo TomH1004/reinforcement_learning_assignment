@@ -135,6 +135,9 @@ class SARSA(TDControlAgent):
   def updateEpsilon(self, epsilon):
     self.policy.epsilon = epsilon
 
+  def update_epsilon(self, epsilon):
+    self.policy.epsilon = epsilon
+
 class ExpectedSARSA(TDControlAgent):
   
   def __init__(self, nStates, nActions, alpha, gamma, actionSelectionMethod="esoft", 
