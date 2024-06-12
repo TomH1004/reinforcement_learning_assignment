@@ -1,0 +1,84 @@
+
+	2024-06-12 21:39:37 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [520]	INFO : START SIMULATION	
+
+
+	2024-06-12 21:39:37 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [605]	INFO : AGENT 'Double Q-Learning' SELECTED	
+
+
+	2024-06-12 21:39:37 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [640]	INFO : TRAIN AGENT [../model_storage/2024-06-12_21-39-37/]	
+
+
+	2024-06-12 21:39:37 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [151]	INFO : Episode: 0	
+
+
+	2024-06-12 21:40:57 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [151]	INFO : Episode: 100	
+
+
+	2024-06-12 21:42:26 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [151]	INFO : Episode: 200	
+
+
+	2024-06-12 21:44:18 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [151]	INFO : Episode: 300	
+
+
+	2024-06-12 21:45:49 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [151]	INFO : Episode: 400	
+
+
+	2024-06-12 21:47:36 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:train_model [106]	INFO : Training Statistics: Avg Steps = 389.48, Avg Reward = 1959.27, Goal Rate = 28.40%	
+
+
+	2024-06-12 21:47:36 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [642]	INFO : FINISH TRAINING OF AGENT	
+
+
+	2024-06-12 21:47:36 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [658]	INFO : LOADING TRAININGSDATA '../model_storage/2024-06-12_21-39-37/race3-5states-q-table_Double Q-Learning_2024-06-12_21-39-37'	
+
+
+	2024-06-12 21:47:36 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [661]	INFO : RETRAIN AGENT WITH '../model_storage/2024-06-12_21-39-37/race3-5states-q-table_Double Q-Learning_2024-06-12_21-39-37' [../model_storage/2024-06-12_21-39-37/]	
+
+
+	2024-06-12 21:47:36 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:train_model [94]	INFO : USE GIVEN Q-TABLE	
+
+
+	2024-06-12 21:47:36 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [151]	INFO : Episode: 0	
+
+
+	2024-06-12 21:49:20 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [151]	INFO : Episode: 100	
+
+
+	2024-06-12 21:51:27 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [151]	INFO : Episode: 200	
+
+
+	2024-06-12 21:53:23 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [151]	INFO : Episode: 300	
+
+
+	2024-06-12 21:55:21 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [151]	INFO : Episode: 400	
+
+
+	2024-06-12 21:57:08 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:train_model [106]	INFO : Training Statistics: Avg Steps = 463.97, Avg Reward = 6288.01, Goal Rate = 58.20%	
+
+
+	2024-06-12 21:57:08 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [663]	INFO : FINISH RETRAINING OF AGENT	
+
+
+	2024-06-12 21:57:08 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [668]	INFO : TEST AGENT [../model_storage/2024-06-12_21-39-37/]	
+
+
+	2024-06-12 21:58:33 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:test_model [118]	INFO : Test Statistics: Avg Steps = 506.50, Avg Reward = 7064.34, Goal Rate = 60.00%	
+
+
+	2024-06-12 21:58:33 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [670]	INFO : FINISH TESTING OF AGENT	
+
+
+	2024-06-12 21:58:33 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [679]	INFO : LOADING POLICY '../model_storage/2024-06-12_21-39-37/race3-5states-policy_Double Q-Learning_2024-06-12_21-39-37.json'	
+
+
+	2024-06-12 21:58:33 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [681]	INFO : RUN AGENT WITH '../model_storage/2024-06-12_21-39-37/race3-5states-policy_Double Q-Learning_2024-06-12_21-39-37.json' [../model_storage/2024-06-12_21-39-37/]	
+
+
+	2024-06-12 21:58:34 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:run_model [68]	INFO : Run Statistics: Steps = 555, Reward = 8821.07	
+
+
+	2024-06-12 21:58:34 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [683]	INFO : FINISH RUNNING OF AGENT	
+
+
+	2024-06-12 21:58:34 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [687]	INFO : EXIT SIMULATION	
+

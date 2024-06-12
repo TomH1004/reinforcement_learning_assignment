@@ -176,7 +176,7 @@ class PyGame2D:
             reward += 5000  # Additional reward for completing all checkpoints
 
         # Penalty for energy consumption (evaluated at each step)
-        reward -= 5
+        reward -= 10
 
         # Reward for moving away from the start point (evaluated at each step)
         last_action_index = self._car._last_action
@@ -203,13 +203,13 @@ class PyGame2D:
         # Negative reward for to close objects -> if at least one of the sensors is close
         #if(state[0] < 10 or state[1] < 10 or state[2] < 10):
         #    reward -= 5
-        #if(state[0] < 5 or state[1] < 5 or state[2] < 5):
-        #    reward -= 10
+        if(state[0] < 5 or state[1] < 5 or state[2] < 5):
+            reward -= 20
         #if(state[0] < 15):
         #    reward -= 10
         # Positive reward for staying close to the right wall
-        #if(state[2] < 15):
-        #    reward += 5
+        if(state[2] < 15):
+            reward += 10
 
         # Punishment for entering an already entered checkpoint
         #if(self._map_punish_already_reached_chechpoint is True):
