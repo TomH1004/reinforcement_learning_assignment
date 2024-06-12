@@ -35,6 +35,7 @@ class PyGame2D:
         self._map_checkpoint_radius = MAP_CHECKPOINT_RADIUS
         self._map_check_flag = False
         self._map_goal_reached = False
+        self._map_punish_already_reached_chechpoint = False
 
         # car data  
         self._car = car
@@ -65,6 +66,13 @@ class PyGame2D:
     def _check_checkpoint(self):
         """check if the Car touches a checkpoint, touched checkpoints will be removed
         """
+        # checking if an already entered checkpoint was entered
+        for i in range(self._map_current_checkpoint):
+            __p = self._map_checkpoint_list[i]
+            __dist = self._get_distance(__p, self._car._center)
+            if(__dist < self._map_checkpoint_radius):
+                 self._map_punish_already_reached_chechpoint = True
+
         __p = self._map_checkpoint_list[self._map_current_checkpoint]
         __dist = self._get_distance(__p, self._car._center)
         if(__dist < self._map_checkpoint_radius):
@@ -179,6 +187,29 @@ class PyGame2D:
             if 'angle' in action:
                 angle_change = abs(action['angle'])
                 reward -= 0.1 * angle_change  # Adjust the multiplier as needed
+
+        # Reward for close objects
+        state = list(self._car.observation)
+        # Add noise to sensor before evalutation
+        noiseConf = {"north": [-5, 0], "west": [-1, 1], "ost": [-1, 1]}
+        state[0]=state[0]+random.randint(noiseConf['west'][0], noiseConf['west'][1])
+        state[1]=state[1]+random.randint(noiseConf['north'][0], noiseConf['north'][1])
+        state[2]=state[2]+random.randint(noiseConf['ost'][0], noiseConf['ost'][1])
+        # Negative reward for to close objects -> if at least one of the sensors is close
+        if(state[0] < 10 or state[1] < 10 or state[2] < 10):
+            reward -= 25
+        if(state[0] < 5 or state[1] < 5 or state[2] < 5):
+            reward -= 50
+        if(state[0] > 25):
+            reward -= 5
+        # Positive reward for staying close to the right wall
+        if(state[2] < 25):
+            reward += 5
+
+        # Punishment for entering an already entered checkpoint
+        if(self._map_punish_already_reached_chechpoint is True):
+            reward -= 10
+            self._map_punish_already_reached_chechpoint = False
 
         return reward
 

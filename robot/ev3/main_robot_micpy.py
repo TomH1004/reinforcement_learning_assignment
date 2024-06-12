@@ -67,9 +67,9 @@ def preprocessing_observations5(observations):
             __value = 0 # obstacle detected
         elif(__observation < (10 + __car_size * __resize_factor)):
             __value = 1 # obstacle detected
-        elif(__observation < (15 + __car_size * __resize_factor)):
+        elif(__observation < (25 + __car_size * __resize_factor)):
             __value = 2 # obstacle detected
-        elif(__observation < (20 + __car_size * __resize_factor)):
+        elif(__observation < (30 + __car_size * __resize_factor)):
             __value = 3 # obstacle detected
         else:
             __value = 4 

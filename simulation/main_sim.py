@@ -192,8 +192,8 @@ def _runExperiment_NStep(agent_nEpisodes, env, agent, states_list, observation_s
       __new_state = __convert_3d_to_1d(state_3d=__new_state, observation_space_num=observation_space_num)
 
       # Reduce epsilon until zero
-      if hasattr(agent.policy, "epsilon"):
-          agent.policy.epsilon *= epsilon_decay
+      #if hasattr(agent.policy, "epsilon"):
+      #      agent.policy.epsilon *= 0.99998
 
       __new_action = agent.selectAction(__new_state)
 
@@ -486,6 +486,9 @@ def setup_random_map():
         logger.error("Map config not found for map: %s", selected_map)
         sys.exit(1)
     return config
+
+#def check_actions(action):
+#    if(action == 0):
     
 ################################################################
 ###                          M A I N                         ###
@@ -585,7 +588,9 @@ if __name__ == "__main__":
     # Policy
     policy_epsilon = 0.1
 
-    epsilon_decay = 0.9
+    epsilon_decay = 0.9 + (0.00004 / (agent_nEpisodes / 100))
+    if epsilon_decay > 1:
+        epsilon_decay = 1
 
     # env.render()
 
@@ -639,7 +644,6 @@ if __name__ == "__main__":
     ######################### AGENT TRAIN #########################
 
     if (RETRAIN_MODEL):
-        # agent.policy.epsilon = 0
         q_data_file = CURRENT_FILE_PATH + file_prefix + 'q-table' + file_suffix
         rewards_file = CURRENT_FILE_PATH + file_prefix + 'reward_sums' + file_suffix
         if hasattr(agent.policy, "epsilon"):
