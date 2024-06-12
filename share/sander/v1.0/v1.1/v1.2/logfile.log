@@ -1,0 +1,60 @@
+
+	2024-06-12 21:31:27 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [520]	INFO : START SIMULATION	
+
+
+	2024-06-12 21:31:28 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [605]	INFO : AGENT 'Double Q-Learning' SELECTED	
+
+
+	2024-06-12 21:31:28 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [640]	INFO : TRAIN AGENT [../model_storage/2024-06-12_21-31-27/]	
+
+
+	2024-06-12 21:31:28 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [151]	INFO : Episode: 0	
+
+
+	2024-06-12 21:33:08 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:train_model [106]	INFO : Training Statistics: Avg Steps = 422.05, Avg Reward = 3971.91, Goal Rate = 41.00%	
+
+
+	2024-06-12 21:33:08 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [642]	INFO : FINISH TRAINING OF AGENT	
+
+
+	2024-06-12 21:33:08 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [658]	INFO : LOADING TRAININGSDATA '../model_storage/2024-06-12_21-31-27/race3-5states-q-table_Double Q-Learning_2024-06-12_21-31-27'	
+
+
+	2024-06-12 21:33:08 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [661]	INFO : RETRAIN AGENT WITH '../model_storage/2024-06-12_21-31-27/race3-5states-q-table_Double Q-Learning_2024-06-12_21-31-27' [../model_storage/2024-06-12_21-31-27/]	
+
+
+	2024-06-12 21:33:08 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:train_model [94]	INFO : USE GIVEN Q-TABLE	
+
+
+	2024-06-12 21:33:08 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [151]	INFO : Episode: 0	
+
+
+	2024-06-12 21:34:53 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:train_model [106]	INFO : Training Statistics: Avg Steps = 428.76, Avg Reward = 7656.08, Goal Rate = 67.00%	
+
+
+	2024-06-12 21:34:53 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [663]	INFO : FINISH RETRAINING OF AGENT	
+
+
+	2024-06-12 21:34:53 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [668]	INFO : TEST AGENT [../model_storage/2024-06-12_21-31-27/]	
+
+
+	2024-06-12 21:35:47 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:test_model [118]	INFO : Test Statistics: Avg Steps = 324.60, Avg Reward = 6973.20, Goal Rate = 70.00%	
+
+
+	2024-06-12 21:35:47 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [670]	INFO : FINISH TESTING OF AGENT	
+
+
+	2024-06-12 21:35:47 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [679]	INFO : LOADING POLICY '../model_storage/2024-06-12_21-31-27/race3-5states-policy_Double Q-Learning_2024-06-12_21-31-27.json'	
+
+
+	2024-06-12 21:35:47 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [681]	INFO : RUN AGENT WITH '../model_storage/2024-06-12_21-31-27/race3-5states-policy_Double Q-Learning_2024-06-12_21-31-27.json' [../model_storage/2024-06-12_21-31-27/]	
+
+
+	2024-06-12 21:35:48 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:run_model [68]	INFO : Run Statistics: Steps = 508, Reward = 9012.31	
+
+
+	2024-06-12 21:35:48 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [683]	INFO : FINISH RUNNING OF AGENT	
+
+
+	2024-06-12 21:35:48 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [687]	INFO : EXIT SIMULATION	
+

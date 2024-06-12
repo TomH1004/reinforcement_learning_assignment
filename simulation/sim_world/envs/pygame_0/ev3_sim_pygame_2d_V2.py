@@ -44,6 +44,7 @@ class PyGame2D:
         self._car.set_start_position(self._car_start_pos)
         self._car.set_map(self._map)
         self._car.init_robot_input_and_output() # update map for sensors
+        self.rotation_in_a_row = 0
     
     def reset(self):
         self._map_current_checkpoint = 0
@@ -114,14 +115,18 @@ class PyGame2D:
 
     def action(self, action):
         """perform the given action
-
+        
         Args:
             action (int): numerical representation of the action
         """
         logger.debug("ACTION: \'%s\'",action)
         # execute desired car action, calc new car coordinates
         self._car.action(action)
-        
+        # Check how often car rotated in a row -> rest in evaluate function
+        if(action != 0 and action != 5):
+            self.rotation_in_a_row += 1
+        else:
+            self.rotation_in_a_row = 0
         # update the car on the screen
         self._car._rotate_surface = self._rot_center(self._car._surface, self._car._angle)
 
@@ -196,20 +201,23 @@ class PyGame2D:
         state[1]=state[1]+random.randint(noiseConf['north'][0], noiseConf['north'][1])
         state[2]=state[2]+random.randint(noiseConf['ost'][0], noiseConf['ost'][1])
         # Negative reward for to close objects -> if at least one of the sensors is close
-        if(state[0] < 10 or state[1] < 10 or state[2] < 10):
-            reward -= 25
-        if(state[0] < 5 or state[1] < 5 or state[2] < 5):
-            reward -= 50
-        if(state[0] > 25):
-            reward -= 5
+        #if(state[0] < 10 or state[1] < 10 or state[2] < 10):
+        #    reward -= 5
+        #if(state[0] < 5 or state[1] < 5 or state[2] < 5):
+        #    reward -= 10
+        #if(state[0] < 15):
+        #    reward -= 10
         # Positive reward for staying close to the right wall
-        if(state[2] < 25):
-            reward += 5
+        #if(state[2] < 15):
+        #    reward += 5
 
         # Punishment for entering an already entered checkpoint
-        if(self._map_punish_already_reached_chechpoint is True):
-            reward -= 10
-            self._map_punish_already_reached_chechpoint = False
+        #if(self._map_punish_already_reached_chechpoint is True):
+        #    reward -= 10
+        #    self._map_punish_already_reached_chechpoint = False
+
+        if(self.rotation_in_a_row > 7):
+            reward -= 500
 
         return reward
 

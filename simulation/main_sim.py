@@ -578,7 +578,7 @@ if __name__ == "__main__":
 
     agent_exerciseID = 0
     agent_nExperiments = 1
-    agent_nEpisodes = 100
+    agent_nEpisodes = 500
 
     # Agent
     agent_alpha = 0.05 # 0.1
