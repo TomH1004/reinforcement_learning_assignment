@@ -29,7 +29,7 @@ def run_model(car, policy):
         __observations = car.observe()
 
         # preprocessing of the measured values
-        __state = preprocessing_observations9(observations=__observations)
+        __state = preprocessing_observations5(observations=__observations)
 
         # select the best action; based on state
         __action = greedy(policy=policy, state=__state)
@@ -59,9 +59,11 @@ def preprocessing_observations(observations):
     return __obs_discrete
 
 def preprocessing_observations5(observations):
+
     __car_size = 24 #cm
     __obs_discrete = []
     __resize_factor = 1
+
     for __observation in observations:
         if(__observation < (5 + __car_size * __resize_factor)):
             __value = 0 # obstacle detected
@@ -76,6 +78,7 @@ def preprocessing_observations5(observations):
         __obs_discrete.append(__value)
 
     return __obs_discrete
+
 
 def preprocessing_observations7(observations):
     __car_size = 24 #cm
@@ -139,13 +142,15 @@ if __name__ == '__main__':
     # trained policy
     #policy_file = '../../model_storage/policy_SARSA.json'
     # local policy
-    policy_file = 'model_storage/policy_SARSA.json'
+    policy_file = 'model_storage/policy.json'
     
     actions_dict = {
-        0: {'speed' : 20},
-        1: {'angle' : -45},
-        2: {'angle' : 45},
-        3: {'speed' : -20}
+        0: {'angle' : -45},
+        1: {'angle' : 45},
+        2: {'angle' : -15},
+        3: {'angle' : 15},
+        4: {'speed' : 10},
+        5: {'speed' : -10}
     }
     
     ev3 = Car(actions=actions_dict)

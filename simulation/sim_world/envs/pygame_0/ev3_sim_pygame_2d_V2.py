@@ -149,16 +149,6 @@ class PyGame2D:
         """
         reward = 0
 
-        last_action_index = self._car._last_action
-        if last_action_index in self._car.actions_dict:
-            action = self._car.actions_dict[last_action_index]
-            if 'speed' in action:
-                initial_distance_to_goal = self._get_distance(self._car_start_pos, self._map_checkpoint_list[-1])
-                current_distance_to_goal = self._get_distance(self._car._center, self._map_checkpoint_list[-1])
-                if initial_distance_to_goal != 0:
-                    progress_reward = 2 * (initial_distance_to_goal - current_distance_to_goal) / initial_distance_to_goal
-                    reward += progress_reward
-
         # Reward for reaching checkpoints (evaluated at each step, but only rewards once per checkpoint)
         for i, checkpoint in enumerate(self._map_checkpoint_list):
             if self._get_distance(self._car._center, checkpoint) <= self._map_checkpoint_radius:
@@ -198,23 +188,23 @@ class PyGame2D:
         # Add noise to sensor before evalutation
         noiseConf = {"north": [-5, 0], "west": [-1, 1], "ost": [-1, 1]}
         state[0]=state[0]+random.randint(noiseConf['west'][0], noiseConf['west'][1])
-        state[1]=state[1]+random.randint(noiseConf['north'][0], noiseConf['north'][1])
+        state[1]=max(0,state[1]+noiseConf['north'][0])
         state[2]=state[2]+random.randint(noiseConf['ost'][0], noiseConf['ost'][1])
         # Negative reward for to close objects -> if at least one of the sensors is close
         #if(state[0] < 10 or state[1] < 10 or state[2] < 10):
         #    reward -= 5
         if(state[0] < 5 or state[1] < 5 or state[2] < 5):
-            reward -= 20
+            reward -= 80
         #if(state[0] < 15):
         #    reward -= 10
         # Positive reward for staying close to the right wall
-        if(state[2] < 15):
-            reward += 10
+        # if(state[2] < 15):
+        #     reward += 10
 
         # Punishment for entering an already entered checkpoint
-        #if(self._map_punish_already_reached_chechpoint is True):
-        #    reward -= 10
-        #    self._map_punish_already_reached_chechpoint = False
+        if(self._map_punish_already_reached_chechpoint is True):
+           reward -= 50
+           self._map_punish_already_reached_chechpoint = False
 
         if(self.rotation_in_a_row > 7):
             reward -= 500

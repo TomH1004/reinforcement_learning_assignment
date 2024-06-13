@@ -38,21 +38,23 @@ class DiscretizeHelper:
         __obs_discrete = []
 
         for __observation in observations:
-            if __observation < (5 + (__car_size * __resize_factor)):
+            if __observation < (5 + (__car_size * __resize_factor)): 
                 # obstacle detected
                 __value = states_list[1][0]
-            elif __observation < (10 * __resize_factor + __car_size):
+            elif (__observation < (10 * __resize_factor + __car_size)):
                 # close obstacle detected
                 __value = states_list[1][1]
             elif __observation < (15 * __resize_factor + __car_size):
                 # obstacle detected
                 __value = states_list[1][2]
-            elif __observation < (20 * __resize_factor + (__car_size)):
+            elif __observation < (20 * __resize_factor + (__car_size)) and len(states_list[0])>3 and len(states_list[2])>3:
                 # obstacle detected
                 __value = states_list[1][3]
-            else:
+            elif (len(states_list[0])>3 and len(states_list[2])>3):
                 # no obstacle detected
                 __value = states_list[1][4]
+            else:
+                __value = states_list[1][2]
             __obs_discrete.append(__value)
         self.logger.debug("OBSERVATION DISCRETE '%s'", str(__obs_discrete))
         return __obs_discrete
