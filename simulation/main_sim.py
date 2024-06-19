@@ -14,7 +14,10 @@ from reinforcement_agents.agents import TemporalDifferenceLearning as TDL
 from sim_world.envs.car_0.ev3_sim_car import SimCar as Car
 from sim_world.envs.pygame_0.ev3_sim_pygame_2d_V2 import PyGame2D as Simulation
 import optuna
+import optuna.visualization as vis
 import random
+import argparse
+import matplotlib.pyplot as plt
 from sim_world.maps_config import get_map_config, maps_config
 
 from preprocess import DiscretizeHelper as DH
@@ -94,7 +97,8 @@ def train_model(env, agent, states_list, file_path, file_prefix, file_suffix, q_
         logger.info('USE GIVEN Q-TABLE')
 
     __reward_sums, __evst, __actionValueTable_history, stats = _runExperiment_NStep(agent_nEpisodes=agent_nEpisodes, env=env, agent=agent, states_list=states_list, observation_space_num=__observation_space_nums)
-    
+    rewards_smooth = floating_avarage(__reward_sums)
+    np.save(file_path + file_prefix + 'floating_rewards' + file_suffix + '.npy', rewards_smooth)
     np.save(file_path + file_prefix + 'q-table' + file_suffix + '.npy', __actionValueTable_history[-1])
     np.save(file_path + file_prefix + 'reward_sums' + file_suffix + '.npy', __reward_sums)
 
@@ -469,13 +473,32 @@ def optimize_params(trial, env, nStates, states_list, q_table=None):
         logger.info('Results of hyper parameter: alpha=%.2f, gamma=%.2f, epsilon=%.2f', alpha, gamma, policy_epsilon)
         logger.info('Training Statistics: Avg Steps = %.2f, Avg Reward = %.2f, Goal Rate = %.2f%%',
                     stats['avg_steps'], stats['avg_reward'], stats['goal_rate'])
-        return stats['avg_reward'], stats['goal_rate']
+        return stats['avg_reward'], stats['goal_rate']/100
 
 def noise_sensors(state, noiseConf):
     state[0]=state[0]+random.randint(noiseConf['west'][0], noiseConf['west'][1])
     state[1]=state[1]+random.randint(noiseConf['north'][0], noiseConf['north'][1])
     state[2]=state[2]+random.randint(noiseConf['ost'][0], noiseConf['ost'][1])
     return state
+
+def floating_avarage(rewards):
+    # Berechne den gleitenden Durchschnitt mit einem Fenster von 10 Episoden
+    window_size = 10
+
+    # moving avarage
+    rewards_smooth = np.convolve(rewards, np.ones(window_size)/window_size, mode='valid')
+    
+    # Erstelle das Liniendiagramm des gleitenden Durchschnitts
+    plt.figure(figsize=(12, 6))
+    plt.plot(rewards_smooth, label='Moving Average of Rewards', color='orange')
+    plt.xlabel('Episode')
+    plt.ylabel('Sum of Rewards')
+    plt.title('Moving Average of Rewards in Each Episode')
+    plt.legend()
+    plt.grid(True)
+    plt.show()
+
+    return rewards_smooth
 
 
 def setup_random_map():
@@ -496,15 +519,22 @@ def setup_random_map():
 
 if __name__ == "__main__":
 
+    
+    
+    parser = argparse.ArgumentParser(description='Verarbeite agentIdx und states_listIdx.')
+
+    # Füge Argumente hinzu
+    parser.add_argument('--agentIdx', type=int, default=0)
+    parser.add_argument('--statesIdx', type=int, default=0)
+    parser.add_argument('--filePfx', default="")
+
+    # Argumente parsen
+    args = parser.parse_args()
+
     ### get commandline parameters: 1st arg: agent; 2nd arg state_list ###
-    agentIdx = 2
-    states_listIdx = 1
-    args = sys.argv[1:]
-    if len(args) == 1:
-        agentIdx = int(args[0])
-    if len(args) == 2:
-        agentIdx = int(args[0])
-        states_listIdx = int(args[1])
+    agentIdx = args.agentIdx
+    states_listIdx = args.statesIdx
+    file_prefix = args.filePfx
 
     ROOT_FILE_PATH = "../model_storage/"
     current_datetimestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
@@ -529,7 +559,7 @@ if __name__ == "__main__":
     OPTIMIZE = False
 
     #noiseConf = {"north": [0, 0], "west": [0, 0], "ost": [0, 0]}
-    noiseConf = {"north": [-5, 0], "west": [-1, 1], "ost": [-1, 1]}
+    noiseConf = {"north": [-6, -5], "west": [-1, 1], "ost": [-1, 1]}
 
     # manual path
     # CURRENT_FILE_PATH = ""
@@ -549,18 +579,19 @@ if __name__ == "__main__":
     CAR_ENERGY_MAX = 3000
 
     # States & Actions
-    
-    nStates = [27,125,343,729]        # 3*3*3, 5*5*5, 7*7*7
     # states_list = [['west'], ['north'], ['east']]
     # states_list = [[0, 1, 2], [0, 1, 2], [0, 1, 2]]
+    # 353, 575, 474
     states_list = [
-        [[0, 1, 2], [0, 1, 2], [0, 1, 2]],
-        [[0, 1, 2, 3, 4], [0, 1, 2, 3, 4], [0, 1, 2, 3, 4]],
-        [[0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4, 5, 6]],
-        [[0, 1, 2, 3, 4, 5, 6, 7, 8], [0, 1, 2, 3, 4, 5, 6, 7, 8], [0, 1, 2, 3, 4, 5, 6, 7, 8]],
+        [[0, 1, 2], [0, 1, 2, 3, 4], [0, 1, 2]],
+        [[0, 1, 2, 3, 4], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3, 4]],
+        [[0, 1, 2, 3], [0, 1, 2, 3, 4, 5, 6], [0, 1, 2, 3]],
     ]
+    compute_states = lambda x,y,z: len(x)*len(y)*len(z)
+    nStates = compute_states(*states_list[states_listIdx])
+
     actions_dict = {
-        0: {'speed' : 20, 'energy' : -2},
+        0: {'speed' : 15, 'energy' : -2},
         1: {'angle' : -45, 'energy' : -15},
         2: {'angle' : 45, 'energy' : -15},
         3: {'angle' : -15, 'energy' : -5},
@@ -596,14 +627,13 @@ if __name__ == "__main__":
 
     # Agent
     agents = [
-        TDL.SARSA(nStates[states_listIdx], nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon),
-        TDL.QLearning(nStates[states_listIdx], nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon),
-        TDL.DoubleQLearning(nStates[states_listIdx], nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon)
+        TDL.SARSA(nStates, nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon),
+        TDL.QLearning(nStates, nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon),
+        TDL.DoubleQLearning(nStates, nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon)
     ]
 
     agent = agents[agentIdx]
     logger.info("AGENT '%s' SELECTED", str(agent.getName()))
-    file_prefix = "race3-5states-"
     file_suffix = "_" + agent.getName() + "_" + current_datetimestamp
 
     ######################### HYPERPARAMETER OPTIMIZATION #########################
@@ -612,7 +642,7 @@ if __name__ == "__main__":
         objective = partial(
             optimize_params,
             env=env,
-            nStates=nStates[states_listIdx],
+            nStates=nStates,
             states_list=states_list[states_listIdx],
         )
         search_space = {"alpha": [0.01, 0.05, 0.1, 0.15, 0.2], "gamma": [0.8, 0.85, 0.9, 0.95, 0.99]}
@@ -623,15 +653,14 @@ if __name__ == "__main__":
             opt_params = np.save(CURRENT_FILE_PATH + file_prefix + "optimized-params" + file_suffix + ".npy",
                 [study.best_trials],
             )
-            if hasattr(agent, "alpha"):
-                agent.alpha = study.best_params["alpha"]
-                logger.info("Set hyper parameter: alpha=%.2f", agent.alpha)
-            if hasattr(agent, "gamma"):
-                agent.gamma = study.best_params["gamma"]
-                logger.info("Set hyper parameter: gamma=%.2f", agent.gamma)
+            fig = vis.plot_contour(study, target=lambda t: t.values[1])
+            fig.show()
+            fig.write_image(CURRENT_FILE_PATH + file_prefix + "optimized_params.jpg", format="jpg")
+            fig.write_json(CURRENT_FILE_PATH + file_prefix + "optimized_params.json")
             logger.info("FINISHED OPTIMIZING")
 
         except RuntimeError as e:
+                logger.info(e)
                 logger.info("Could not find goal with parameter from search_space.")
         # Set optimized paramter for traininig
         
