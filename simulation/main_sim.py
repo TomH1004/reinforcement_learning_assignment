@@ -148,21 +148,21 @@ def _runExperiment_NStep(agent_nEpisodes, env, agent, states_list, observation_s
   total_steps = 0
   total_rewards = 0
   goals_reached = 0
-
+  randomMap = False
   for __e in range(agent_nEpisodes):
     __timesteps = 0
     if (__e % 100 == 0):
       logger.info('Episode: %s', str(__e))
 
-    
-    config = setup_random_map()
-    MAP = config["path"]
-    MAP_START_COORDINATES = config["start_coordinates"]
-    MAP_CHECK_POINT_LIST = config["check_point_list"]
+    if randomMap:
+        config = setup_random_map()
+        MAP = config["path"]
+        MAP_START_COORDINATES = config["start_coordinates"]
+        MAP_CHECK_POINT_LIST = config["check_point_list"]
 
-    sim_car = Car(actions_dict=actions_dict, car_file='./sim_world/envs/Lego-Robot.png', energy=CAR_ENERGY_START, energy_max=CAR_ENERGY_MAX)
-    sim_pygame = Simulation(map_file_path=MAP, car=sim_car, start_coordinates=MAP_START_COORDINATES, checkpoints_list=MAP_CHECK_POINT_LIST)
-    env = gym.make("Robot_Simulation_Pygame-v2", pygame=sim_pygame)
+        sim_car = Car(actions_dict=actions_dict, car_file='./sim_world/envs/Lego-Robot.png', energy=CAR_ENERGY_START, energy_max=CAR_ENERGY_MAX)
+        sim_pygame = Simulation(map_file_path=MAP, car=sim_car, start_coordinates=MAP_START_COORDINATES, checkpoints_list=MAP_CHECK_POINT_LIST)
+        env = gym.make("Robot_Simulation_Pygame-v2", pygame=sim_pygame)
       
     __state = env.reset()
 
@@ -476,9 +476,9 @@ def optimize_params(trial, env, nStates, states_list, q_table=None):
         return stats['avg_reward'], stats['goal_rate']/100
 
 def noise_sensors(state, noiseConf):
-    state[0]=state[0]+random.randint(noiseConf['west'][0], noiseConf['west'][1])
-    state[1]=state[1]+random.randint(noiseConf['north'][0], noiseConf['north'][1])
-    state[2]=state[2]+random.randint(noiseConf['ost'][0], noiseConf['ost'][1])
+    state[0]=max(0,state[0]+random.randint(noiseConf['west'][0], noiseConf['west'][1]))
+    state[1]=max(0,state[1]+random.randint(noiseConf['north'][0], noiseConf['north'][1]))
+    state[2]=max(0,state[2]+random.randint(noiseConf['ost'][0], noiseConf['ost'][1]))
     return state
 
 def floating_avarage(rewards):
@@ -536,7 +536,7 @@ if __name__ == "__main__":
     states_listIdx = args.statesIdx
     file_prefix = args.filePfx
 
-    ROOT_FILE_PATH = "../model_storage/"
+    ROOT_FILE_PATH = "../model_storage/zE01/"
     current_datetimestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     if not os.path.exists(ROOT_FILE_PATH + current_datetimestamp):
         os.makedirs(ROOT_FILE_PATH + current_datetimestamp)
@@ -609,7 +609,7 @@ if __name__ == "__main__":
 
     agent_exerciseID = 0
     agent_nExperiments = 1
-    agent_nEpisodes = 100
+    agent_nEpisodes = 5000
 
     # Agent
     agent_alpha = 0.05 # 0.1

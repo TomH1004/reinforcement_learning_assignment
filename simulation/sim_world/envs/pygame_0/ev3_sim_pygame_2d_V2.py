@@ -191,20 +191,20 @@ class PyGame2D:
         # Reward for close objects
         state = list(self._car.observation)
         # Add noise to sensor before evalutation
-        noiseConf = {"north": [-5, 0], "west": [-1, 1], "ost": [-1, 1]}
+        noiseConf = {"north": [-6, -5], "west": [-1, 1], "ost": [-1, 1]}
         state[0]=state[0]+random.randint(noiseConf['west'][0], noiseConf['west'][1])
-        state[1]=state[1]+random.randint(noiseConf['north'][0], noiseConf['north'][1])
+        state[1]=max(0,state[1]+random.randint(noiseConf['north'][0], noiseConf['north'][1]))
         state[2]=state[2]+random.randint(noiseConf['ost'][0], noiseConf['ost'][1])
         # Negative reward for to close objects -> if at least one of the sensors is close
         if(state[0] < 10 or state[1] < 10 or state[2] < 10):
             reward -= 25
         if(state[0] < 5 or state[1] < 5 or state[2] < 5):
             reward -= 50
-        if(state[0] > 25):
-            reward -= 5
+        # Der Reward macht keinen Sinn weil einmal reward +25 für state[2] < 10 
+        #                                   und einmal -5 für  state[2] < 25 
         # Positive reward for staying close to the right wall
-        if(state[2] < 25):
-            reward += 5
+        #if(state[2] < 25):
+        #    reward += 5
 
         # Punishment for entering an already entered checkpoint
         if(self._map_punish_already_reached_chechpoint is True):
