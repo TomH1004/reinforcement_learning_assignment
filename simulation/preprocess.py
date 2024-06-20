@@ -108,7 +108,7 @@ if __name__ == "__main__":
     for path in pathsReward474:
         sums=np.load(path, allow_pickle=True)
         agentNames.append(agentPattern474.search(path).group(1))
-        fl_rewards.append(np.convolve(sums, np.ones(window_size)/window_size, mode='valid'))
+        fl_rewards.append(np.convolve(sums, np.ones(window_size)/window_size, mode='same'))
     x = range(len(fl_rewards[0]))
     y = fl_rewards
     plotAgentRewards(x,y,agentNames, window_size, "474 race3")
@@ -121,7 +121,7 @@ if __name__ == "__main__":
     for path in pathsReward575:
         sums=np.load(path, allow_pickle=True)
         agentNames.append(agentPattern575.search(path).group(1))
-        fl_rewards.append(np.convolve(sums, np.ones(window_size)/window_size, mode='valid'))    
+        fl_rewards.append(np.convolve(sums, np.ones(window_size)/window_size, mode='same'))    
     x = range(len(fl_rewards[0]))
     y = fl_rewards
     plotAgentRewards(x,y,agentNames, window_size, "575 race3")
