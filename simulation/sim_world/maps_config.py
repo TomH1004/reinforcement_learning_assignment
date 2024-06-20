@@ -12,7 +12,7 @@ maps_config = {
     "race3": {
         "path": './sim_world/race_tracks/3.PNG',
         "start_coordinates": (65, 560),
-        "check_point_list": [(375, 160), (790, 160), (1200, 160)]
+        "check_point_list": [(280,380), (375, 160), (790, 160), (1200, 160)]
     },
     "race4": {
         "path": './sim_world/race_tracks/4.PNG',
