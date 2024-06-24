@@ -211,7 +211,7 @@ def _runExperiment_NStep(agent_nEpisodes, env, agent, states_list, observation_s
 
             __reward_sums[-1] += __reward
 
-            if (__e % 10 == 0):
+            if (__e % 2 == 0):
                 env.render()
 
         __episodesvstimesteps.append([__e, __timesteps])
@@ -223,8 +223,8 @@ def _runExperiment_NStep(agent_nEpisodes, env, agent, states_list, observation_s
         if __info.get('goal_reached', False):
             goals_reached += 1
             map_rewards_goal_rates[MAP]['goals'] += 1
-            print(f"Episode {__e}: REACHED GOAL")
-            print(f"Episode {__e}: Reward = {__reward_sums[-1]}")
+            print(f"Episode {__e + 1}: REACHED GOAL")
+            print(f"Episode {__e + 1}: Reward = {__reward_sums[-1]}")
 
         # Store table data
         if (__e % 50 == 0):
@@ -311,7 +311,7 @@ def _test_q_table(q_table, env, states_list, agent_nEpisodes):
 
                 __state = __new_state
 
-                if __e % 1 == 0:
+                if __e % 10 == 0:
                     env.render()
 
             map_goal_rates[map_name]['episodes'] += 1
@@ -319,7 +319,7 @@ def _test_q_table(q_table, env, states_list, agent_nEpisodes):
             if __info.get('goal_reached', False):
                 map_goal_rates[map_name]['goals'] += 1
                 total_goals += 1
-                print(f"Episode {__e} on Map {map_name}: REACHED GOAL")
+                print(f"Episode {__e + 1} on Map {map_name}: REACHED GOAL")
 
     # Compute the goal rate for each map
     for map_key in map_goal_rates:
@@ -570,7 +570,7 @@ if __name__ == "__main__":
     ############################ SETUP ############################
 
     TRAIN_MODEL = True
-    RETRAIN_MODEL = True
+    RETRAIN_MODEL = False
     TEST_MODEL = True
     RUN_MODEL = True
     OPTIMIZE = False
@@ -592,8 +592,8 @@ if __name__ == "__main__":
         logger.error("Map config not found")
         sys.exit(1)
 
-    CAR_ENERGY_START = 3000
-    CAR_ENERGY_MAX = 3000
+    CAR_ENERGY_START = 2000
+    CAR_ENERGY_MAX = 2000
 
     # States & Actions
     # states_list = [['west'], ['north'], ['east']]
@@ -626,7 +626,7 @@ if __name__ == "__main__":
 
     agent_exerciseID = 0
     agent_nExperiments = 1
-    agent_nEpisodes = 2000
+    agent_nEpisodes = 1000
 
     # Agent
     agent_alpha = 0.05 # 0.1
