@@ -451,8 +451,8 @@ def optimize_params(trial, env, nStates, states_list, q_table=None):
             file_suffix (strings): #TODO
             q_table (np.array, optional): q_table used for init. Defaults to None.
         """
-        alpha = trial.suggest_categorical("alpha", [0.01, 0.05, 0.1, 0.15, 0.2])
-        gamma = trial.suggest_categorical("gamma", [0.8, 0.85, 0.9, 0.95, 0.99])
+        alpha = trial.suggest_categorical("alpha", search_space['alpha'])
+        gamma = trial.suggest_categorical("gamma", search_space['gamma'])
         logger.info("New set of hyper parameter: alpha=%.2f, gamma=%.2f, epsilon=%.2f", alpha, gamma, policy_epsilon)
         if agentIdx == 0:
             agent = TDL.SARSA(nStates, nActions, alpha,
@@ -489,14 +489,14 @@ def floating_avarage(rewards):
     rewards_smooth = np.convolve(rewards, np.ones(window_size)/window_size, mode='valid')
     
     # Erstelle das Liniendiagramm des gleitenden Durchschnitts
-    plt.figure(figsize=(12, 6))
-    plt.plot(rewards_smooth, label='Moving Average of Rewards', color='orange')
-    plt.xlabel('Episode')
-    plt.ylabel('Sum of Rewards')
-    plt.title('Moving Average of Rewards in Each Episode')
-    plt.legend()
-    plt.grid(True)
-    plt.show()
+#    plt.figure(figsize=(12, 6))
+#    plt.plot(rewards_smooth, label='Moving Average of Rewards', color='orange')
+#    plt.xlabel('Episode')
+#    plt.ylabel('Sum of Rewards')
+#    plt.title('Moving Average of Rewards in Each Episode')
+#    plt.legend()
+#    plt.grid(True)
+#    plt.show()
 
     return rewards_smooth
 
@@ -536,7 +536,7 @@ if __name__ == "__main__":
     states_listIdx = args.statesIdx
     file_prefix = args.filePfx
 
-    ROOT_FILE_PATH = "../model_storage/zE01/"
+    ROOT_FILE_PATH = "../model_storage/zE03/"
     current_datetimestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     if not os.path.exists(ROOT_FILE_PATH + current_datetimestamp):
         os.makedirs(ROOT_FILE_PATH + current_datetimestamp)
@@ -612,8 +612,8 @@ if __name__ == "__main__":
     agent_nEpisodes = 5000
 
     # Agent
-    agent_alpha = 0.05 # 0.1
-    agent_gamma = 0.99 # 0.9
+    agent_alpha = 0.006 #qq 0.006 # 2st 0.005 # 1st 0.1
+    agent_gamma = 0.75 #qq 0.8 # 2st 0.78 # 1st 0.9
     agent_n_steps = 5 # 5
     
     # Policy
@@ -645,7 +645,10 @@ if __name__ == "__main__":
             nStates=nStates,
             states_list=states_list[states_listIdx],
         )
-        search_space = {"alpha": [0.01, 0.05, 0.1, 0.15, 0.2], "gamma": [0.8, 0.85, 0.9, 0.95, 0.99]}
+        # 1st: search_space = {"alpha": [0.01, 0.05, 0.1, 0.15, 0.2], "gamma": [0.8, 0.85, 0.9, 0.95, 0.99]}
+        # 2st: search_space = {"alpha": [0.001, 0.005, 0.01], "gamma": [0.75, 0.78, 0.8, 0.82, 0.85]} ## Q-Learning
+        search_space = {"alpha": [0.006, 0.007, 0.008, 0.009], "gamma": [0.75, 0.78, 0.8, 0.82, 0.85]}
+        #search_space = {"alpha": [0.01, 0.05], "gamma": [0.99, 0.8]}
         study = optuna.create_study(directions=["maximize","maximize"],
             sampler=optuna.samplers.GridSampler(search_space))
         study.optimize(objective, show_progress_bar=True)
@@ -653,10 +656,11 @@ if __name__ == "__main__":
             opt_params = np.save(CURRENT_FILE_PATH + file_prefix + "optimized-params" + file_suffix + ".npy",
                 [study.best_trials],
             )
-            fig = vis.plot_contour(study, target=lambda t: t.values[1])
+            fig = vis.plot_contour(study, target_name="Goal rate", target=lambda t: t.values[1])
+            #fig.update_layout({"title": ""+ str(agents[agentIdx].getName()) +" - Race 3 - "+agent_nEpisodes+" episodes - " + "575"})
             fig.show()
-            fig.write_image(CURRENT_FILE_PATH + file_prefix + "optimized_params.jpg", format="jpg")
-            fig.write_json(CURRENT_FILE_PATH + file_prefix + "optimized_params.json")
+            fig.write_image(CURRENT_FILE_PATH + file_prefix + "optimized_params" + file_suffix + ".jpg", format="jpg")
+            fig.write_json(CURRENT_FILE_PATH + file_prefix + "optimized_params" + file_suffix + ".json")
             logger.info("FINISHED OPTIMIZING")
 
         except RuntimeError as e:
