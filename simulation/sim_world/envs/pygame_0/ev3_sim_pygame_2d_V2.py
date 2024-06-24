@@ -25,7 +25,7 @@ class PyGame2D:
         self.__pygame_screen = pygame.display.set_mode((self._map_screen_width, self._map_screen_height))
         self.__pygame_clock = pygame.time.Clock()
         self.__pygame_font_info = pygame.font.SysFont("Arial", 20)
-        self.__pygame_game_speed = 60
+        self.__pygame_game_speed = 6000
         self.__pygame_mode = 0
         
         # map data 
@@ -145,43 +145,35 @@ class PyGame2D:
         reward = 0
 
         last_action_index = self._car._last_action
-        if last_action_index in self._car.actions_dict:
-            action = self._car.actions_dict[last_action_index]
-            if 'speed' in action:
-                initial_distance_to_goal = self._get_distance(self._car_start_pos, self._map_checkpoint_list[-1])
-                current_distance_to_goal = self._get_distance(self._car._center, self._map_checkpoint_list[-1])
-                if initial_distance_to_goal != 0:
-                    progress_reward = 2 * (initial_distance_to_goal - current_distance_to_goal) / initial_distance_to_goal
-                    reward += progress_reward
-
+        
         # Reward for reaching checkpoints (evaluated at each step, but only rewards once per checkpoint)
         for i, checkpoint in enumerate(self._map_checkpoint_list):
             if self._get_distance(self._car._center, checkpoint) <= self._map_checkpoint_radius:
                 if i not in self._reached_checkpoints:
-                    print(f"Reached Checkpoint {i}")
+                    print(f"Reached Checkpoint {i+1}")
                     self._reached_checkpoints.add(i)
                     reward += 1500  # Large reward for reaching a checkpoint
 
         # Penalty for collisions (evaluated at each step)
         if self._car._is_crashed:
-            reward -= 2000
+            reward = -2000
+            return reward
 
         # Additional reward for reaching the final checkpoint (evaluated at each step)
         if self._map_goal_reached:
             reward += 5000  # Additional reward for completing all checkpoints
+            return reward
 
         # Penalty for energy consumption (evaluated at each step)
         reward -= 5
 
         # Reward for moving away from the start point (evaluated at each step)
-        last_action_index = self._car._last_action
         if last_action_index in self._car.actions_dict:
             action = self._car.actions_dict[last_action_index]
             if 'speed' in action:
                 reward += 5  # Adjust the multiplier as needed
 
         # Negative reward for turning too much (evaluated at each step)
-        last_action_index = self._car._last_action
         if last_action_index in self._car.actions_dict:
             action = self._car.actions_dict[last_action_index]
             if 'angle' in action:
@@ -196,10 +188,10 @@ class PyGame2D:
         state[1]=max(0,state[1]+random.randint(noiseConf['north'][0], noiseConf['north'][1]))
         state[2]=state[2]+random.randint(noiseConf['ost'][0], noiseConf['ost'][1])
         # Negative reward for to close objects -> if at least one of the sensors is close
-        if(state[0] < 10 or state[1] < 10 or state[2] < 10):
-            reward -= 25
-        if(state[0] < 5 or state[1] < 5 or state[2] < 5):
-            reward -= 50
+        if(state[0] < 35 or state[1] < 35 or state[2] < 35):
+            reward -= 5
+        if(state[0] < 15 or state[1] < 15 or state[2] < 15):
+            reward -= 5
         # Der Reward macht keinen Sinn weil einmal reward +25 für state[2] < 10 
         #                                   und einmal -5 für  state[2] < 25 
         # Positive reward for staying close to the right wall
@@ -207,9 +199,10 @@ class PyGame2D:
         #    reward += 5
 
         # Punishment for entering an already entered checkpoint
-        if(self._map_punish_already_reached_chechpoint is True):
-            reward -= 10
-            self._map_punish_already_reached_chechpoint = False
+        # Reward hat nur negative Auswirkungen auf das Lernen, deshalb vorerst auskommentiert
+        # if(self._map_punish_already_reached_chechpoint is True):
+        #     reward -= 500
+        #     self._map_punish_already_reached_chechpoint = False
 
         return reward
 

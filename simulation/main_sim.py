@@ -96,8 +96,8 @@ def train_model(env, agent, states_list, file_path, file_prefix, file_suffix, q_
         agent.actionValueTable = q_table
         logger.info('USE GIVEN Q-TABLE')
 
-    __reward_sums, __evst, __actionValueTable_history, stats = _runExperiment_NStep(agent_nEpisodes=agent_nEpisodes, env=env, agent=agent, states_list=states_list, observation_space_num=__observation_space_nums)
-    rewards_smooth = floating_avarage(__reward_sums)
+    __reward_sums, __evst, __actionValueTable_history, stats, map_rewards_goal_rates = _runExperiment_NStep(agent_nEpisodes=agent_nEpisodes, env=env, agent=agent, states_list=states_list, observation_space_num=__observation_space_nums)
+    rewards_smooth = plot_rewards(__reward_sums, map_rewards_goal_rates)
     np.save(file_path + file_prefix + 'floating_rewards' + file_suffix + '.npy', rewards_smooth)
     np.save(file_path + file_prefix + 'q-table' + file_suffix + '.npy', __actionValueTable_history[-1])
     np.save(file_path + file_prefix + 'reward_sums' + file_suffix + '.npy', __reward_sums)
@@ -117,45 +117,167 @@ def test_model(env, agent, states_list, file_path, file_prefix, file_suffix, q_t
     __q_data = read_numpy_data(numpy_file=file_path + file_prefix + 'q-table' + file_suffix)
 
     # test the q-table
-    __reward_sums, __episodesvstimesteps, stats = _test_q_table(q_table=__q_data, env=env, states_list=states_list, agent_nEpisodes=10)
-    logger.debug('reward sums = \'%s\'', str(__reward_sums))
-    logger.info('Test Statistics: Avg Steps = %.2f, Avg Reward = %.2f, Goal Rate = %.2f%%',
-                stats['avg_steps'], stats['avg_reward'], stats['goal_rate'])
+    map_goal_rates, total_goal_rate = _test_q_table(q_table=__q_data, env=env, states_list=states_list, agent_nEpisodes=100)
+    
+    # Plot the goal rates
+    plot_goal_rates(map_goal_rates, total_goal_rate)
 
 ################################################################
 ### Additional functions only for the simulation environment ###
 ################################################################
 
 def _runExperiment_NStep(agent_nEpisodes, env, agent, states_list, observation_space_num):
-  """Train and test the agent in the given Environment for the given Episodes.
-     Function for N-Step agents.
+    """Train and test the agent in the given Environment for the given Episodes.
+       Function for N-Step agents.
+
+      Args:
+          agent_nEpisodes (int): number of Episoeds to train
+          env (gym env): Evironment to train/test the agent in
+          agent (agent): the agent to train
+          observation_space_num (list): number of states per dimenson of observation
+
+      Returns:
+          list: reward_sums
+          list: episodesvstimesteps 
+          list: actionValueTable_history
+          dict: statistics
+          dict: map_rewards_goal_rates
+    """
+    __reward_sums = []
+    __episodesvstimesteps = []
+    __actionValueTable_history = []
+    total_steps = 0
+    total_rewards = 0
+    goals_reached = 0
+    randomMap = True
+    map_rewards_goal_rates = {}
+
+    for __e in range(agent_nEpisodes):
+        __timesteps = 0
+        if (__e % 100 == 0):
+            logger.info('Episode: %s', str(__e))
+
+        if randomMap:
+            config = setup_random_map()
+            MAP = config["path"]
+            MAP_START_COORDINATES = config["start_coordinates"]
+            MAP_CHECK_POINT_LIST = config["check_point_list"]
+
+            sim_car = Car(actions_dict=actions_dict, car_file='./sim_world/envs/Lego-Robot.png', energy=CAR_ENERGY_START, energy_max=CAR_ENERGY_MAX)
+            sim_pygame = Simulation(map_file_path=MAP, car=sim_car, start_coordinates=MAP_START_COORDINATES, checkpoints_list=MAP_CHECK_POINT_LIST)
+            env = gym.make("Robot_Simulation_Pygame-v2", pygame=sim_pygame)
+
+            # Use MAP as the key for tracking rewards and goals for each map
+            if MAP not in map_rewards_goal_rates:
+                map_rewards_goal_rates[MAP] = {'rewards': [], 'goals': 0}
+
+        __state = env.reset()
+        __state = noise_sensors(__state, noiseConf)
+        __state = pp.preprocess(observations=__state, states_list=states_list)
+        __state = __convert_3d_to_1d(state_3d=__state, observation_space_num=observation_space_num)
+        __action = agent.selectAction(__state)
+        __done = False
+        __experiences = [{}]
+        __reward_sums.append(0.0)
+
+        while (not __done):
+            __timesteps += 1
+            __experiences[-1]['state'] = __state
+            __experiences[-1]['action'] = __action
+            __experiences[-1]['done'] = __done
+
+            __new_state, __reward, __done, __info = env.step(__action)
+            __new_state = noise_sensors(__new_state, noiseConf)
+            __new_state = pp.preprocess(observations=__new_state, states_list=states_list)
+            __new_state = __convert_3d_to_1d(state_3d=__new_state, observation_space_num=observation_space_num)
+
+            __new_action = agent.selectAction(__new_state)
+
+            __xp = {}
+            __xp['state'] = __new_state
+            __xp['reward'] = __reward
+            __xp['done'] = __done
+            __xp['action'] = __new_action
+            __experiences.append(__xp)
+
+            agent.update(__experiences[-2:])
+
+            if (agent.getName() == "SARSA"):
+                __action = __new_action
+            else:
+                __action = agent.selectAction(__new_state)
+
+            __state = __new_state
+
+            __reward_sums[-1] += __reward
+
+            if (__e % 2 == 0):
+                env.render()
+
+        __episodesvstimesteps.append([__e, __timesteps])
+
+        total_steps += __timesteps
+        total_rewards += __reward_sums[-1]
+
+        map_rewards_goal_rates[MAP]['rewards'].append(__reward_sums[-1])
+        if __info.get('goal_reached', False):
+            goals_reached += 1
+            map_rewards_goal_rates[MAP]['goals'] += 1
+            print(f"Episode {__e + 1}: REACHED GOAL")
+            print(f"Episode {__e + 1}: Reward = {__reward_sums[-1]}")
+
+        # Store table data
+        if (__e % 50 == 0):
+            if (agent.getName() == 'Double Q-Learning'):
+                __avg_action_table = np.mean(np.array([agent.actionValueTable_1.copy(), agent.actionValueTable_2.copy()]), axis=0)
+                __actionValueTable_history.append(__avg_action_table.copy())
+            else:
+                __actionValueTable_history.append(agent.actionValueTable.copy())
+
+        if (__e % 100 == 0):
+            __title = agent.getName() + ' Episode:' + str(__e)
+            logger.debug('%s | reward_sums = \'%s\'', str(__title), str(__reward_sums[-1]))
+
+    avg_steps = total_steps / agent_nEpisodes
+    avg_reward = total_rewards / agent_nEpisodes
+    goal_rate = (goals_reached / agent_nEpisodes) * 100
+
+    stats = {
+        'avg_steps': avg_steps,
+        'avg_reward': avg_reward,
+        'goal_rate': goal_rate
+    }
+
+    # Compute the average reward and goal rate for each map
+    for map_key in map_rewards_goal_rates:
+        rewards = map_rewards_goal_rates[map_key]['rewards']
+        goals = map_rewards_goal_rates[map_key]['goals']
+        map_rewards_goal_rates[map_key]['avg_reward'] = sum(rewards) / len(rewards) if rewards else 0
+        map_rewards_goal_rates[map_key]['goal_rate'] = (goals / len(rewards)) * 100 if rewards else 0
+
+    return __reward_sums, np.array(__episodesvstimesteps), __actionValueTable_history, stats, map_rewards_goal_rates
+
+def _test_q_table(q_table, env, states_list, agent_nEpisodes):
+    """test the given q-table under a greedy policy (argmax)
 
     Args:
-        agent_nEpisodes (int): number of Episoeds to train
-        env (gym env): Evironment to train/test the agent in
-        agent (agent): the agent to train
-        observation_space_num (list): number of states per dimenson of observation
+        q_table (np.array): q_table to test
+        env (gym.Env): gym Environment to test the agent in
+        agent_nEpisodes (int): number of episodes
 
     Returns:
-        list: reward_sums
-        list: episodesvstimesteps 
-        list: actionValueTable_history
-        dict: statistics
-  """
-  __reward_sums = []
-  __episodesvstimesteps = []
-  __actionValueTable_history = []
-  total_steps = 0
-  total_rewards = 0
-  goals_reached = 0
-  randomMap = False
-  for __e in range(agent_nEpisodes):
-    __timesteps = 0
-    if (__e % 100 == 0):
-      logger.info('Episode: %s', str(__e))
+        dict: map_goal_rates
+        float: total_goal_rate
+    """
+    __observation_space_nums = __get_observation_space_num(env=env, states_list=states_list)
 
-    if randomMap:
-        config = setup_random_map()
+    map_goal_rates = {}
+    total_goals = 0
+    total_episodes = 0
+
+    for map_name, config in maps_config.items():
+        map_goal_rates[map_name] = {'goals': 0, 'episodes': 0}
+
         MAP = config["path"]
         MAP_START_COORDINATES = config["start_coordinates"]
         MAP_CHECK_POINT_LIST = config["check_point_list"]
@@ -163,186 +285,50 @@ def _runExperiment_NStep(agent_nEpisodes, env, agent, states_list, observation_s
         sim_car = Car(actions_dict=actions_dict, car_file='./sim_world/envs/Lego-Robot.png', energy=CAR_ENERGY_START, energy_max=CAR_ENERGY_MAX)
         sim_pygame = Simulation(map_file_path=MAP, car=sim_car, start_coordinates=MAP_START_COORDINATES, checkpoints_list=MAP_CHECK_POINT_LIST)
         env = gym.make("Robot_Simulation_Pygame-v2", pygame=sim_pygame)
-      
-    __state = env.reset()
 
-    # bring noice in data
-    __state = noise_sensors(__state, noiseConf)
+        for __e in range(100):  # Test each map for 100 episodes
+            __timesteps = 0
+            __state = env.reset()
 
-    # __state = preprocessing_observations(observations=__state, states_list=states_list)
-    # preprocessing of the measured values (uses 5 states for north, ost and west)
-    # method preprocess() automatically select preprocess method dependend from states_list
-    __state = pp.preprocess(observations=__state, states_list=states_list)
+            # preprocessing of the measured values
+            __state = pp.preprocess(observations=__state, states_list=states_list)
 
-    # transform to 1d-coodinates
-    __state = __convert_3d_to_1d(state_3d=__state, observation_space_num=observation_space_num)
-    __action = agent.selectAction(__state)    
-    __done = False
-    __experiences = [{}]
-    __reward_sums.append(0.0)
-    while (not __done):
-      __timesteps += 1
-      __experiences[-1]['state'] = __state
-      __experiences[-1]['action'] = __action
-      __experiences[-1]['done'] = __done
-      
-      __new_state, __reward, __done, __info = env.step(__action)
-      # bring noise to data
-      __new_state = noise_sensors(__new_state, noiseConf)
-      # preprocessing of the measured values
-      # __new_state = pp.preprocessing_observations(observations=__new_state, states_list=states_list)
-      __new_state = pp.preprocess(observations=__new_state, states_list=states_list)
-      # transform to 1d-coodinates
-      __new_state = __convert_3d_to_1d(state_3d=__new_state, observation_space_num=observation_space_num)
+            __q_table_index = __convert_3d_to_1d(state_3d=__state, observation_space_num=__observation_space_nums)
+            __action = np.argmax(q_table[__q_table_index])
+            __done = False
+            while not __done:
+                __timesteps += 1
 
-      # Reduce epsilon until zero
-      #if hasattr(agent.policy, "epsilon"):
-      #      agent.policy.epsilon *= 0.99998
+                __new_state, __reward, __done, __info = env.step(__action)
 
-      __new_action = agent.selectAction(__new_state)
+                # preprocessing of the measured values
+                __new_state = pp.preprocess(observations=__new_state, states_list=states_list)
 
-      __xp = {}
-      __xp['state'] = __new_state
-      __xp['reward'] = __reward
-      __xp['done'] = __done
-      __xp['action'] = __new_action
-      __experiences.append(__xp)
-      
-      agent.update(__experiences[-2:])
-      
-      if (agent.getName() == "SARSA"):
-        __action = __new_action
-      else:
-        __action = agent.selectAction(__new_state)
-      
-      __state = __new_state
-      
-      __reward_sums[-1] += __reward
+                # transform to 1d-coordinates
+                __new_state = __convert_3d_to_1d(state_3d=__new_state, observation_space_num=__observation_space_nums)
 
-      if (__e % 100 == 0):
-          env.render()
-    __episodesvstimesteps.append([__e, __timesteps])
+                __action = np.argmax(q_table[__new_state])
 
-    total_steps += __timesteps
-    total_rewards += __reward_sums[-1]
-    if __info.get('goal_reached', False):
-        goals_reached += 1
-        print(f"Episode {__e}: REACHED GOAL")
-        print(f"Episode {__e}: Reward = {__reward_sums[-1]}")
+                __state = __new_state
 
-    # store table data
-    if (__e % 50 == 0):
-        if (agent.getName() == 'Double Q-Learning'):
-          __avg_action_table = np.mean(np.array([agent.actionValueTable_1.copy(), agent.actionValueTable_2.copy()]), axis=0)
-          __actionValueTable_history.append(__avg_action_table.copy())
-        else:
-          __actionValueTable_history.append(agent.actionValueTable.copy())
+                if __e % 10 == 0:
+                    env.render()
 
-    if (__e % 100 == 0):
-        __title = agent.getName() + ' Episode:' + str(__e)
-        logger.debug('%s | reward_sums = \'%s\'', str(__title), str(__reward_sums[-1]))
-      
-  avg_steps = total_steps / agent_nEpisodes
-  avg_reward = total_rewards / agent_nEpisodes
-  goal_rate = (goals_reached / agent_nEpisodes) * 100
+            map_goal_rates[map_name]['episodes'] += 1
+            total_episodes += 1
+            if __info.get('goal_reached', False):
+                map_goal_rates[map_name]['goals'] += 1
+                total_goals += 1
+                print(f"Episode {__e + 1} on Map {map_name}: REACHED GOAL")
 
-  stats = {
-      'avg_steps': avg_steps,
-      'avg_reward': avg_reward,
-      'goal_rate': goal_rate
-  }
+    # Compute the goal rate for each map
+    for map_key in map_goal_rates:
+        map_goal_rates[map_key]['goal_rate'] = (map_goal_rates[map_key]['goals'] / map_goal_rates[map_key]['episodes']) * 100
 
-  return __reward_sums, np.array(__episodesvstimesteps), __actionValueTable_history, stats
+    # Compute the total goal rate for all maps
+    total_goal_rate = (total_goals / total_episodes) * 100
 
-def _test_q_table(q_table, env, states_list, agent_nEpisodes):
-  """test the given q-table under an greedy policy (argmax)
-
-  Args:
-      q_table (np.array): q_table to test
-      env (gym.Env): gym Environment to test the agent in
-      agent_nEpisodes (int): number of episodes
-
-  Returns:
-      reward_sums (list): sum of rewards per Episode
-      episodesvstimesteps (np.array): steps per episode
-      dict: statistics
-  """
-  __observation_space_nums = __get_observation_space_num(env=env, states_list=states_list)
-
-  __reward_sums = []
-  __episodesvstimesteps = []
-  
-  total_steps = 0
-  total_rewards = 0
-  goals_reached = 0
-
-  for __e in range(agent_nEpisodes):
-      __timesteps = 0
-
-      config = setup_random_map()
-      MAP = config["path"]
-      MAP_START_COORDINATES = config["start_coordinates"]
-      MAP_CHECK_POINT_LIST = config["check_point_list"]
-
-      sim_car = Car(actions_dict=actions_dict, car_file='./sim_world/envs/Lego-Robot.png', energy=CAR_ENERGY_START, energy_max=CAR_ENERGY_MAX)
-      sim_pygame = Simulation(map_file_path=MAP, car=sim_car, start_coordinates=MAP_START_COORDINATES, checkpoints_list=MAP_CHECK_POINT_LIST)
-      env = gym.make("Robot_Simulation_Pygame-v2", pygame=sim_pygame)
-          
-      __state = env.reset()
-
-      # preprocessing of the measured values
-      __state = pp.preprocess(observations=__state, states_list=states_list)
-
-      __q_table_index = __convert_3d_to_1d(state_3d=__state, observation_space_num=__observation_space_nums)
-      # __action = agent.selectAction(__state)
-      __action = np.argmax(q_table[__q_table_index])
-      __done = False
-      __reward_sums.append(0.0)
-      while (not __done):
-          __timesteps += 1
-          
-          __experiences = [{}]
-          __experiences[-1]['state'] = __state
-          __experiences[-1]['action'] = __action
-          __experiences[-1]['done'] = __done
-          
-          __new_state, __reward, __done, __info = env.step(__action)
-
-          # preprocessing of the measured values
-          __new_state = pp.preprocess(observations=__new_state, states_list=states_list)
-
-          # transform to 1d-coodinates
-          __new_state = __convert_3d_to_1d(state_3d=__new_state, observation_space_num=__observation_space_nums)
-
-          #new_action = agent.selectAction(new_state)
-          __action = np.argmax(q_table[__new_state]) 
-
-          __state = __new_state
-          
-          if (__e % 1 == 0):
-              env.render()
-
-          #episodesvstimesteps.append([e,timesteps])
-          __reward_sums[-1] += __reward
-      __episodesvstimesteps.append([__e, __timesteps])
-
-      total_steps += __timesteps
-      total_rewards += __reward_sums[-1]
-      if __info.get('goal_reached', False):
-        goals_reached += 1
-        print(f"Episode {__e}: REACHED GOAL")
-
-  avg_steps = total_steps / agent_nEpisodes
-  avg_reward = total_rewards / agent_nEpisodes
-  goal_rate = (goals_reached / agent_nEpisodes) * 100
-
-  stats = {
-      'avg_steps': avg_steps,
-      'avg_reward': avg_reward,
-      'goal_rate': goal_rate
-  }
-
-  return __reward_sums, np.array(__episodesvstimesteps), stats
+    return map_goal_rates, total_goal_rate
 
 def __get_observation_space_num(env, states_list):
     """get the number of steps per dimenion of the observation space
@@ -481,12 +467,12 @@ def noise_sensors(state, noiseConf):
     state[2]=max(0,state[2]+random.randint(noiseConf['ost'][0], noiseConf['ost'][1]))
     return state
 
-def floating_avarage(rewards):
+def plot_rewards(rewards, map_rewards_goal_rates):
     # Berechne den gleitenden Durchschnitt mit einem Fenster von 10 Episoden
     window_size = 10
 
-    # moving avarage
-    rewards_smooth = np.convolve(rewards, np.ones(window_size)/window_size, mode='valid')
+    # moving average
+    rewards_smooth = np.convolve(rewards, np.ones(window_size) / window_size, mode='valid')
     
     # Erstelle das Liniendiagramm des gleitenden Durchschnitts
 #    plt.figure(figsize=(12, 6))
@@ -499,6 +485,24 @@ def floating_avarage(rewards):
 #    plt.show()
 
     return rewards_smooth
+
+
+def plot_goal_rates(map_rewards_goal_rates, overall_goal_rate):
+    map_names = list(map_rewards_goal_rates.keys())
+    goal_rates = [data['goal_rate'] for data in map_rewards_goal_rates.values()]
+    
+    # Add overall goal rate to the data
+    map_names.append('Overall')
+    goal_rates.append(overall_goal_rate)
+    
+    plt.figure(figsize=(12, 6))
+    plt.bar(map_names, goal_rates, color='blue')
+    plt.xlabel('Map')
+    plt.ylabel('Goal Rate (%)')
+    plt.title('Goal Rate per Map and Overall')
+    plt.xticks(rotation=45)
+    plt.grid(True)
+    plt.show()
 
 
 def setup_random_map():
@@ -525,7 +529,7 @@ if __name__ == "__main__":
 
     # Füge Argumente hinzu
     parser.add_argument('--agentIdx', type=int, default=0)
-    parser.add_argument('--statesIdx', type=int, default=0)
+    parser.add_argument('--statesIdx', type=int, default=1)
     parser.add_argument('--filePfx', default="")
 
     # Argumente parsen
@@ -553,7 +557,7 @@ if __name__ == "__main__":
     ############################ SETUP ############################
 
     TRAIN_MODEL = True
-    RETRAIN_MODEL = True
+    RETRAIN_MODEL = False
     TEST_MODEL = True
     RUN_MODEL = True
     OPTIMIZE = False
@@ -575,8 +579,8 @@ if __name__ == "__main__":
         logger.error("Map config not found")
         sys.exit(1)
 
-    CAR_ENERGY_START = 3000
-    CAR_ENERGY_MAX = 3000
+    CAR_ENERGY_START = 2000
+    CAR_ENERGY_MAX = 2000
 
     # States & Actions
     # states_list = [['west'], ['north'], ['east']]
@@ -609,7 +613,7 @@ if __name__ == "__main__":
 
     agent_exerciseID = 0
     agent_nExperiments = 1
-    agent_nEpisodes = 5000
+    agent_nEpisodes = 1000
 
     # Agent
     agent_alpha = 0.006 #qq 0.006 # 2st 0.005 # 1st 0.1
