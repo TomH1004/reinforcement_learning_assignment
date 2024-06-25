@@ -98,6 +98,7 @@ def train_model(env, agent, states_list, file_path, file_prefix, file_suffix, q_
 
     __reward_sums, __evst, __actionValueTable_history, stats, map_rewards_goal_rates = _runExperiment_NStep(agent_nEpisodes=agent_nEpisodes, env=env, agent=agent, states_list=states_list, observation_space_num=__observation_space_nums)
     rewards_smooth = plot_rewards(__reward_sums, map_rewards_goal_rates)
+    np.save(file_path + file_prefix + 'map_reward_goal_rates' + file_suffix + '.npy', map_rewards_goal_rates)
     np.save(file_path + file_prefix + 'floating_rewards' + file_suffix + '.npy', rewards_smooth)
     np.save(file_path + file_prefix + 'q-table' + file_suffix + '.npy', __actionValueTable_history[-1])
     np.save(file_path + file_prefix + 'reward_sums' + file_suffix + '.npy', __reward_sums)
@@ -118,9 +119,9 @@ def test_model(env, agent, states_list, file_path, file_prefix, file_suffix, q_t
 
     # test the q-table
     map_goal_rates, total_goal_rate = _test_q_table(q_table=__q_data, env=env, states_list=states_list, agent_nEpisodes=100)
-    
+    np.savez(file_path + file_prefix + 'map_goal_rates' + file_suffix + '.npy', map_goal_rates, total_goal_rate)
     # Plot the goal rates
-    plot_goal_rates(map_goal_rates, total_goal_rate)
+    #plot_goal_rates(map_goal_rates, total_goal_rate)
 
 ################################################################
 ### Additional functions only for the simulation environment ###
@@ -149,7 +150,7 @@ def _runExperiment_NStep(agent_nEpisodes, env, agent, states_list, observation_s
     total_steps = 0
     total_rewards = 0
     goals_reached = 0
-    randomMap = True
+    randomMap = False
     map_rewards_goal_rates = {}
 
     for __e in range(agent_nEpisodes):
@@ -211,18 +212,19 @@ def _runExperiment_NStep(agent_nEpisodes, env, agent, states_list, observation_s
 
             __reward_sums[-1] += __reward
 
-            if (__e % 2 == 0):
+            if (__e % 20 == 0):
                 env.render()
 
         __episodesvstimesteps.append([__e, __timesteps])
 
         total_steps += __timesteps
         total_rewards += __reward_sums[-1]
-
-        map_rewards_goal_rates[MAP]['rewards'].append(__reward_sums[-1])
+        if randomMap:
+            map_rewards_goal_rates[MAP]['rewards'].append(__reward_sums[-1])
         if __info.get('goal_reached', False):
             goals_reached += 1
-            map_rewards_goal_rates[MAP]['goals'] += 1
+            if randomMap:
+                map_rewards_goal_rates[MAP]['goals'] += 1
             print(f"Episode {__e + 1}: REACHED GOAL")
             print(f"Episode {__e + 1}: Reward = {__reward_sums[-1]}")
 
@@ -540,7 +542,7 @@ if __name__ == "__main__":
     states_listIdx = args.statesIdx
     file_prefix = args.filePfx
 
-    ROOT_FILE_PATH = "../model_storage/zE03/"
+    ROOT_FILE_PATH = "../model_storage/zE04/"
     current_datetimestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     if not os.path.exists(ROOT_FILE_PATH + current_datetimestamp):
         os.makedirs(ROOT_FILE_PATH + current_datetimestamp)
@@ -613,11 +615,16 @@ if __name__ == "__main__":
 
     agent_exerciseID = 0
     agent_nExperiments = 1
-    agent_nEpisodes = 1000
+    agent_nEpisodes = 100
 
     # Agent
-    agent_alpha = 0.006 #qq 0.006 # 2st 0.005 # 1st 0.1
-    agent_gamma = 0.75 #qq 0.8 # 2st 0.78 # 1st 0.9
+    hyperparameter = [
+        {'alpha': 0.1, 'gamma': 0.9 },    # SARSA
+        {'alpha': 0.006, 'gamma': 0.75 },   # Q
+        {'alpha': 0.006, 'gamma': 0.8 },    # QQ
+    ]
+    agent_alpha = hyperparameter[agentIdx]['alpha'] #qq 0.006 # 2st 0.005 # 1st 0.1
+    agent_gamma = hyperparameter[agentIdx]['gamma'] #qq 0.8 # 2st 0.78 # 1st 0.9
     agent_n_steps = 5 # 5
     
     # Policy
