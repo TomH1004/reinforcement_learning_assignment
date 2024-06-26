@@ -215,7 +215,7 @@ def _runExperiment_NStep(agent_nEpisodes, env, agent, states_list, observation_s
       
       __reward_sums[-1] += __reward
 
-      if (__e % 10 == 0):
+      if (__e % 50 == 0):
           env.render()
     __episodesvstimesteps.append([__e, __timesteps])
 
@@ -472,9 +472,9 @@ def optimize_params(trial, env, nStates, states_list, q_table=None):
         return stats['avg_reward'], stats['goal_rate']
 
 def noise_sensors(state, noiseConf):
-    state[0]=state[0]+random.randint(noiseConf['west'][0], noiseConf['west'][1])
-    state[1]=max(0,state[1]+noiseConf['north'][0])
-    state[2]=state[2]+random.randint(noiseConf['ost'][0], noiseConf['ost'][1])
+    state[0] = state[0] - 10
+    state[1] = state[1] - 10
+    state[2] = state[2] - 10
     return state
 
 
@@ -562,10 +562,10 @@ if __name__ == "__main__":
     ]
     actions_dict = {
         0: {'speed' : 10, 'energy' : -2},
-        1: {'angle' : -45, 'energy' : -15},
-        2: {'angle' : 45, 'energy' : -15},
-        3: {'angle' : -15, 'energy' : -5},
-        4: {'angle' : 15, 'energy' : -5},
+        1: {'angle' : -45, 'energy' : -90},
+        2: {'angle' : 45, 'energy' : -90},
+        3: {'angle' : -15, 'energy' : -30},
+        4: {'angle' : 15, 'energy' : -30},
         5: {'speed' : 5, 'energy' : -1}
     }
     nActions = len(actions_dict)
@@ -579,7 +579,7 @@ if __name__ == "__main__":
 
     agent_exerciseID = 0
     agent_nExperiments = 1
-    agent_nEpisodes = 100
+    agent_nEpisodes = 300
 
     # Agent
     agent_alpha = 0.05 # 0.1

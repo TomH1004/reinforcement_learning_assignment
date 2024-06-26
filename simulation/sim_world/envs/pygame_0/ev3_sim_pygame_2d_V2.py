@@ -159,14 +159,14 @@ class PyGame2D:
 
         # Penalty for collisions (evaluated at each step)
         if self._car._is_crashed:
-            reward -= 2000
+            reward -= 50000
 
         # Additional reward for reaching the final checkpoint (evaluated at each step)
         if self._map_goal_reached:
-            reward += 5000  # Additional reward for completing all checkpoints
+            reward += 50000  # Additional reward for completing all checkpoints
 
         # Penalty for energy consumption (evaluated at each step)
-        reward -= 10
+        reward -= 0
 
         # Reward for moving away from the start point (evaluated at each step)
         last_action_index = self._car._last_action
@@ -181,29 +181,29 @@ class PyGame2D:
             action = self._car.actions_dict[last_action_index]
             if 'angle' in action:
                 angle_change = abs(action['angle'])
-                reward -= 0.1 * angle_change  # Adjust the multiplier as needed
+                reward -= 1 * angle_change  # Adjust the multiplier as needed
 
         # Reward for close objects
         state = list(self._car.observation)
         # Add noise to sensor before evalutation
-        noiseConf = {"north": [-5, 0], "west": [-1, 1], "ost": [-1, 1]}
-        state[0]=state[0]+random.randint(noiseConf['west'][0], noiseConf['west'][1])
-        state[1]=max(0,state[1]+noiseConf['north'][0])
-        state[2]=state[2]+random.randint(noiseConf['ost'][0], noiseConf['ost'][1])
+        # noiseConf = {"north": [-5, 0], "west": [-1, 1], "ost": [-1, 1]}
+        state[0] = state[0] - 5
+        state[1] = state[1] - 10
+        state[2] = state[2] - 5
         # Negative reward for to close objects -> if at least one of the sensors is close
         #if(state[0] < 10 or state[1] < 10 or state[2] < 10):
         #    reward -= 5
         if(state[0] < 5 or state[1] < 5 or state[2] < 5):
-            reward -= 80
+            reward -= 25
         #if(state[0] < 15):
         #    reward -= 10
         # Positive reward for staying close to the right wall
-        # if(state[2] < 15):
-        #     reward += 10
+        #if(state[2] < 20):
+        #     reward += 5
 
         # Punishment for entering an already entered checkpoint
         if(self._map_punish_already_reached_chechpoint is True):
-           reward -= 50
+           reward -= 25
            self._map_punish_already_reached_chechpoint = False
 
         if(self.rotation_in_a_row > 7):
