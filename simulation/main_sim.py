@@ -581,8 +581,8 @@ if __name__ == "__main__":
         logger.error("Map config not found")
         sys.exit(1)
 
-    CAR_ENERGY_START = 2000
-    CAR_ENERGY_MAX = 2000
+    CAR_ENERGY_START = 3000
+    CAR_ENERGY_MAX = 3000
 
     # States & Actions
     # states_list = [['west'], ['north'], ['east']]

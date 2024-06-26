@@ -25,7 +25,7 @@ class PyGame2D:
         self.__pygame_screen = pygame.display.set_mode((self._map_screen_width, self._map_screen_height))
         self.__pygame_clock = pygame.time.Clock()
         self.__pygame_font_info = pygame.font.SysFont("Arial", 20)
-        self.__pygame_game_speed = 6000
+        self.__pygame_game_speed = 600
         self.__pygame_mode = 0
         
         # map data 
@@ -162,6 +162,11 @@ class PyGame2D:
         # Additional reward for reaching the final checkpoint (evaluated at each step)
         if self._map_goal_reached:
             reward += 5000  # Additional reward for completing all checkpoints
+            return reward
+        
+        # Penalty when energy is depleted (evaluated at each step)
+        if self._car.energy <= 0:
+            reward -= 1000
             return reward
 
         # Penalty for energy consumption (evaluated at each step)
