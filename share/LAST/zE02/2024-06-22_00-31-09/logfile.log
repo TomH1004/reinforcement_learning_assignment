@@ -1,0 +1,78 @@
+
+	2024-06-22 00:31:09 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [550]	INFO : START SIMULATION	
+
+
+	2024-06-22 00:31:10 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [636]	INFO : AGENT 'Double Q-Learning' SELECTED	
+
+
+	2024-06-22 00:31:10 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [673]	INFO : TRAIN AGENT [../model_storage/zE02/2024-06-22_00-31-09/]	
+
+
+	2024-06-22 00:31:10 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 0	
+
+
+	2024-06-22 00:33:26 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 100	
+
+
+	2024-06-22 00:36:49 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 200	
+
+
+	2024-06-22 00:39:51 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 300	
+
+
+	2024-06-22 00:43:01 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 400	
+
+
+	2024-06-22 00:46:08 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 500	
+
+
+	2024-06-22 00:49:07 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 600	
+
+
+	2024-06-22 00:52:09 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 700	
+
+
+	2024-06-22 00:55:13 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 800	
+
+
+	2024-06-22 00:58:12 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 900	
+
+
+	2024-06-22 01:01:12 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 1000	
+
+
+	2024-06-22 01:04:16 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 1100	
+
+
+	2024-06-22 01:07:11 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 1200	
+
+
+	2024-06-22 01:10:14 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 1300	
+
+
+	2024-06-22 01:13:15 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 1400	
+
+
+	2024-06-22 01:16:15 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 1500	
+
+
+	2024-06-22 01:19:20 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 1600	
+
+
+	2024-06-22 01:22:20 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 1700	
+
+
+	2024-06-22 01:25:18 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 1800	
+
+
+	2024-06-22 01:28:28 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 1900	
+
+
+	2024-06-22 01:31:33 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:train_model [110]	INFO : Training Statistics: Avg Steps = 608.16, Avg Reward = 4531.60, Goal Rate = 33.80%	
+
+
+	2024-06-22 01:31:33 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [675]	INFO : FINISH TRAINING OF AGENT	
+
+
+	2024-06-22 01:31:33 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [720]	INFO : EXIT SIMULATION	
+

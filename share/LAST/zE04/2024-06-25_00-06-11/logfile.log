@@ -1,0 +1,57 @@
+
+	2024-06-25 00:06:11 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [557]	INFO : START SIMULATION	
+
+
+	2024-06-25 00:06:11 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [648]	INFO : AGENT 'Double Q-Learning' SELECTED	
+
+
+	2024-06-25 00:06:11 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [685]	INFO : TRAIN AGENT [../model_storage/zE04/2024-06-25_00-06-11/]	
+
+
+	2024-06-25 00:06:11 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [159]	INFO : Episode: 0	
+
+
+	2024-06-25 00:07:50 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:train_model [111]	INFO : Training Statistics: Avg Steps = 344.55, Avg Reward = 785.80, Goal Rate = 4.00%	
+
+
+	2024-06-25 00:07:50 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [687]	INFO : FINISH TRAINING OF AGENT	
+
+
+	2024-06-25 00:07:50 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [703]	INFO : LOADING TRAININGSDATA '../model_storage/zE04/2024-06-25_00-06-11/race3-575-q-table_Double Q-Learning_2024-06-25_00-06-11'	
+
+
+	2024-06-25 00:07:50 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [706]	INFO : RETRAIN AGENT WITH '../model_storage/zE04/2024-06-25_00-06-11/race3-575-q-table_Double Q-Learning_2024-06-25_00-06-11' [../model_storage/zE04/2024-06-25_00-06-11/]	
+
+
+	2024-06-25 00:07:50 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:train_model [97]	INFO : USE GIVEN Q-TABLE	
+
+
+	2024-06-25 00:07:50 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [159]	INFO : Episode: 0	
+
+
+	2024-06-25 00:10:05 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:train_model [111]	INFO : Training Statistics: Avg Steps = 463.22, Avg Reward = 6452.86, Goal Rate = 52.00%	
+
+
+	2024-06-25 00:10:05 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [708]	INFO : FINISH RETRAINING OF AGENT	
+
+
+	2024-06-25 00:10:05 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [713]	INFO : TEST AGENT [../model_storage/zE04/2024-06-25_00-06-11/]	
+
+
+	2024-06-25 00:18:49 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [715]	INFO : FINISH TESTING OF AGENT	
+
+
+	2024-06-25 00:18:49 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [724]	INFO : LOADING POLICY '../model_storage/zE04/2024-06-25_00-06-11/race3-575-policy_Double Q-Learning_2024-06-25_00-06-11.json'	
+
+
+	2024-06-25 00:18:49 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [726]	INFO : RUN AGENT WITH '../model_storage/zE04/2024-06-25_00-06-11/race3-575-policy_Double Q-Learning_2024-06-25_00-06-11.json' [../model_storage/zE04/2024-06-25_00-06-11/]	
+
+
+	2024-06-25 00:18:50 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:run_model [71]	INFO : Run Statistics: Steps = 269, Reward = 10074.50	
+
+
+	2024-06-25 00:18:50 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [728]	INFO : FINISH RUNNING OF AGENT	
+
+
+	2024-06-25 00:18:50 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [732]	INFO : EXIT SIMULATION	
+

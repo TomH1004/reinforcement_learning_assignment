@@ -542,7 +542,7 @@ if __name__ == "__main__":
     states_listIdx = args.statesIdx
     file_prefix = args.filePfx
 
-    ROOT_FILE_PATH = "../model_storage/zE04/"
+    ROOT_FILE_PATH = "../model_storage/zE05sCar/"
     current_datetimestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     if not os.path.exists(ROOT_FILE_PATH + current_datetimestamp):
         os.makedirs(ROOT_FILE_PATH + current_datetimestamp)
@@ -561,7 +561,7 @@ if __name__ == "__main__":
     TRAIN_MODEL = True
     RETRAIN_MODEL = False
     TEST_MODEL = True
-    RUN_MODEL = True
+    RUN_MODEL = False
     OPTIMIZE = False
 
     #noiseConf = {"north": [0, 0], "west": [0, 0], "ost": [0, 0]}
@@ -615,7 +615,7 @@ if __name__ == "__main__":
 
     agent_exerciseID = 0
     agent_nExperiments = 1
-    agent_nEpisodes = 100
+    agent_nEpisodes = 500
 
     # Agent
     hyperparameter = [

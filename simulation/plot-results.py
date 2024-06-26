@@ -36,10 +36,10 @@ def plotAgentRewards(x,y,agentNames, window_size, info=""):
     # Anzeigen des Plots
     plt.show()
 
-def pltRewards(window_size=200):
+def pltRewards(expFol="zE01", window_size=50):
     fl_rewards = []
     agentNames = []
-    expFolder = "zE01"
+    expFolder = expFol
     pathsReward353 = glob.glob(os.path.join('model_storage', expFolder, '**', '*-353-reward_sums*'), recursive=True)
     agentPattern353 = re.compile(r'.*-353-reward_sums_([A-Za-z\s-]+)_.*')
     for path in pathsReward353:
@@ -105,7 +105,7 @@ def plotOptimization():
 
 def plot_goal_rates():
     agentName = ''
-    subFolder = "zE04"
+    subFolder = "zE05sCar"
     map_goal_paths = glob.glob(os.path.join('model_storage', subFolder, '**', '*-map_goal_rates*.npz'))
     statePattern = re.compile(r'.*-map_goal_rates_([A-Za-z\s-]+)_.*\.npz')    
     for path in map_goal_paths:
@@ -135,7 +135,9 @@ if __name__ == "__main__":
     #opt_sarsa = np.load("model_storage/2024-06-01_10-33-05/world3optimized-params_SARSA_2024-06-01_10-33-05.npy", allow_pickle=True)
     #opt_q = np.load("model_storage/2024-06-01_10-33-13/world3optimized-params_Q-Learning_2024-06-01_10-33-13.npy", allow_pickle=True)
 
-    #plot_goal_rates()
+    plot_goal_rates()
 
-    plotOptimization()
-    #pltRewards()
+    #plotOptimization()
+    #pltRewards("zE01", 200)
+    #pltRewards("zE02", 200)
+    #pltRewards("zE03", 200)

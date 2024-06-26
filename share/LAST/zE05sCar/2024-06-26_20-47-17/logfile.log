@@ -1,0 +1,39 @@
+
+	2024-06-26 20:47:17 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [556]	INFO : START SIMULATION	
+
+
+	2024-06-26 20:47:17 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [647]	INFO : AGENT 'SARSA' SELECTED	
+
+
+	2024-06-26 20:47:17 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [684]	INFO : TRAIN AGENT [../model_storage/zE05sCar/2024-06-26_20-47-17/]	
+
+
+	2024-06-26 20:47:17 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [159]	INFO : Episode: 0	
+
+
+	2024-06-26 20:49:51 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [159]	INFO : Episode: 100	
+
+
+	2024-06-26 20:52:56 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [159]	INFO : Episode: 200	
+
+
+	2024-06-26 20:55:50 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [159]	INFO : Episode: 300	
+
+
+	2024-06-26 20:59:11 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [159]	INFO : Episode: 400	
+
+
+	2024-06-26 21:02:23 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:train_model [111]	INFO : Training Statistics: Avg Steps = 655.97, Avg Reward = 1777.94, Goal Rate = 29.00%	
+
+
+	2024-06-26 21:02:23 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [686]	INFO : FINISH TRAINING OF AGENT	
+
+
+	2024-06-26 21:02:23 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [712]	INFO : TEST AGENT [../model_storage/zE05sCar/2024-06-26_20-47-17/]	
+
+
+	2024-06-26 21:16:09 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [714]	INFO : FINISH TESTING OF AGENT	
+
+
+	2024-06-26 21:16:09 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [731]	INFO : EXIT SIMULATION	
+
