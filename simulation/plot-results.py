@@ -79,9 +79,15 @@ def pltRewards(window_size=200):
         plotAgentRewards(x,y,agentNames, window_size, "575 race3")
 
 def plotOptimization():
-    optFolder = "zOpt01"
+    optFolder = "zOpt03"
     optimized_params = glob.glob(os.path.join('model_storage', optFolder, '**', '*-575-optimized*.json'))
+    optimized_params_np = glob.glob(os.path.join('model_storage', optFolder, '**', '*-575-optimized*.npy'))
     statePattern = re.compile(r'.*-(\d{3})-optimized_params_([A-Za-z\s-]+)_.*\.json')
+    optimizations = []
+    # just to read 
+    for path in optimized_params_np:
+        optimizations.append(np.load(path, allow_pickle=True))
+        optimizations
     for path in optimized_params:
         stateName = statePattern.search(path).group(1)
         agentName = statePattern.search(path).group(2)
@@ -89,10 +95,10 @@ def plotOptimization():
             fig_json = f.read()
         loaded = pio.from_json(fig_json)
         loaded.update_layout(
-            title={"text": f"{agentName} - Race 3 - 500 episodes - {stateName}", "font": {"size": 25}},
-            xaxis={"title": {"font": {"size": 25, "weight": "bold"}}},
-            yaxis={"title": {"font": {"size": 25, "weight": "bold"}}},
-            font={"size": 22, "weight": "bold"}
+            title={"text": f"{agentName} - Race 3 - 500 episodes - {stateName}", "font": {"size": 30}},
+            xaxis={"title": {"font": {"size": 30, "weight": "bold"}}},
+            yaxis={"title": {"font": {"size": 30, "weight": "bold"}}},
+            font={"size": 25, "weight": "bold"}
         )
         loaded.show()
         f.close()

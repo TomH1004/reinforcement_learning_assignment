@@ -554,7 +554,7 @@ if __name__ == "__main__":
     logger = logger.createLogger(config="../logging.conf.json", logger_name="__main__", logfile=CURRENT_FILE_PATH + 'logfile.log')
 
     logger.info('START SIMULATION')
-    pp = DH(logger)
+    pp = DH()
     ###############################################################
     ############################ SETUP ############################
 
