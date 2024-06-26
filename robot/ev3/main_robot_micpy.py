@@ -29,7 +29,7 @@ def run_model(car, policy):
         __observations = car.observe()
 
         # preprocessing of the measured values
-        __state = preprocessing_observations9(observations=__observations)
+        __state = preprocessing(__observations)
 
         # select the best action; based on state
         __action = greedy(policy=policy, state=__state)
@@ -43,39 +43,37 @@ def greedy(policy, state):
     __key = str(state[0]) + ' ' + str(state[1]) + ' ' + str(state[2])
     return policy[__key]
 
-def preprocessing_observations(observations):
+def preprocessing(observations):
+        
+        __obs_discrete = []
+        for idx, state in enumerate(observations):
+            value = preprocessing_observations(observations[idx], len(state))
+            __obs_discrete.append(value)
+        return __obs_discrete
+
+def preprocessing_observations(__observation, state_len):
     __car_size = 24 #cm
-    __obs_discrete = []
-
-    for __observation in observations:
-        if(__observation < (__car_size * 1.8)):
-            __value = 1 # obstacle detected
-            if(__observation < (__car_size * 0.6)):
-                __value = 0 # close obstacle detected
-        else:
-            __value = 2 
-        __obs_discrete.append(__value)
-
-    return __obs_discrete
-
-def preprocessing_observations5(observations):
-    __car_size = 24 #cm
-    __obs_discrete = []
     __resize_factor = 1
-    for __observation in observations:
-        if(__observation < (5 + __car_size * __resize_factor)):
-            __value = 0 # obstacle detected
-        elif(__observation < (10 + __car_size * __resize_factor)):
+    if(__observation < (5 + __car_size * __resize_factor)):
+        __value = 0 # obstacle detected
+    elif(__observation < (10 + __car_size * __resize_factor)):
             __value = 1 # obstacle detected
-        elif(__observation < (25 + __car_size * __resize_factor)):
+    elif(__observation < (15 + __car_size * __resize_factor)):
             __value = 2 # obstacle detected
-        elif(__observation < (30 + __car_size * __resize_factor)):
+    elif(__observation < (20 + __car_size * __resize_factor)):
             __value = 3 # obstacle detected
-        else:
-            __value = 4 
-        __obs_discrete.append(__value)
+    elif(__observation < (25 + __car_size * __resize_factor)):
+            __value = 4 # obstacle detected
+    elif(__observation < (30 + __car_size * __resize_factor)):
+            __value = 5 # obstacle detected
+    elif(__observation < (35 + __car_size * __resize_factor)):
+            __value = 6 # obstacle detected
+    elif(__observation < (40 + __car_size * __resize_factor)):
+            __value = 7 # obstacle detected
+    else:
+        __value = 8
 
-    return __obs_discrete
+    return min(state_len-1, __value)
 
 def preprocessing_observations7(observations):
     __car_size = 24 #cm
