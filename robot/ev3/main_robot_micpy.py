@@ -44,11 +44,15 @@ def greedy(policy, state):
     return policy[__key]
 
 def preprocessing(observations):
-        
         __obs_discrete = []
         for idx, state in enumerate(observations):
-            value = preprocessing_observations(observations[idx], len(state))
-            __obs_discrete.append(value)
+                if (idx==0):
+                        value = preprocessing_observations(observations[idx], 5)
+                if (idx==1):
+                        value = preprocessing_observations(observations[idx], 7)
+                if (idx==2):
+                        value = preprocessing_observations(observations[idx], 5)
+                __obs_discrete.append(value)
         return __obs_discrete
 
 def preprocessing_observations(__observation, state_len):
@@ -137,15 +141,16 @@ if __name__ == '__main__':
     # trained policy
     #policy_file = '../../model_storage/policy_SARSA.json'
     # local policy
-    policy_file = 'model_storage/policy_SARSA.json'
+    policy_file = 'model_storage/policy_sDouble Q-Learning.json'
     
     actions_dict = {
-        0: {'speed' : 20},
+        0: {'speed' : 15},
         1: {'angle' : -45},
         2: {'angle' : 45},
-        3: {'speed' : -20}
-    }
-    
+        3: {'angle' : -15},
+        4: {'angle' : 15},
+        5: {'speed' : 5}
+    }    
     ev3 = Car(actions=actions_dict)
 
     if (RUN_MODEL):
