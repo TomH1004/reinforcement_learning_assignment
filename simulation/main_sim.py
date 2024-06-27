@@ -443,30 +443,32 @@ def optimize_params(trial, env, nStates, states_list, q_table=None):
         gamma = trial.suggest_categorical("gamma", search_space['gamma'])
         logger.info("New set of hyper parameter: alpha=%.2f, gamma=%.2f, epsilon=%.2f", alpha, gamma, policy_epsilon)
         if agentIdx == 0:
-            agent = TDL.SARSA(nStates, nActions, alpha,
-                            gamma, epsilon=policy_epsilon)
+            agent = TDL.SARSA(nStates, nActions, alpha,gamma, epsilon=policy_epsilon)
         elif agentIdx == 1:
-            agent = TDL.QLearning(nStates, nActions, alpha,
-                                gamma, epsilon=policy_epsilon)
+            agent = TDL.QLearning(nStates, nActions, alpha,gamma, epsilon=policy_epsilon)
         elif agentIdx == 2:
-            agent = TDL.DoubleQLearning(
-                nStates, nActions, alpha, gamma, epsilon=policy_epsilon
-            )
+            agent = TDL.DoubleQLearning(nStates, nActions, alpha, gamma, epsilon=policy_epsilon)
+        elif agentIdx == 3:
+            agent = TDL.ExpectedSARSA(nStates, nActions, alpha, gamma, epsilon=policy_epsilon)
+        elif agentIdx == 4:
+            agent = TDL.nStepSARSA(nStates, nActions, alpha, gamma, epsilon=policy_epsilon,n=15)
+        elif agentIdx == 5:
+            agent = TDL.nStepTreeBackup(nStates, nActions, alpha, gamma, epsilon=policy_epsilon,n=15)
         __observation_space_nums = __get_observation_space_num(env=env, states_list=states_list)
         if (not (q_table is None)):
             agent.actionValueTable = q_table
             logger.info('USE GIVEN Q-TABLE')
 
-        __reward_sums, __evst, __actionValueTable_history, stats = _runExperiment_NStep(agent_nEpisodes=agent_nEpisodes, env=env, agent=agent, states_list=states_list, observation_space_num=__observation_space_nums)
+        __reward_sums, __evst, __actionValueTable_history, stats, somevalue = _runExperiment_NStep(agent_nEpisodes=agent_nEpisodes, env=env, agent=agent, states_list=states_list, observation_space_num=__observation_space_nums)
         logger.info('Results of hyper parameter: alpha=%.2f, gamma=%.2f, epsilon=%.2f', alpha, gamma, policy_epsilon)
         logger.info('Training Statistics: Avg Steps = %.2f, Avg Reward = %.2f, Goal Rate = %.2f%%',
                     stats['avg_steps'], stats['avg_reward'], stats['goal_rate'])
         return stats['avg_reward'], stats['goal_rate']/100
 
 def noise_sensors(state, noiseConf):
-    state[0]=max(0,state[0]+random.randint(noiseConf['west'][0], noiseConf['west'][1]))
-    state[1]=max(0,state[1]+random.randint(noiseConf['north'][0], noiseConf['north'][1]))
-    state[2]=max(0,state[2]+random.randint(noiseConf['ost'][0], noiseConf['ost'][1]))
+    state[0]=state[0]
+    state[1]=state[1]
+    state[2]=state[2]
     return state
 
 def plot_rewards(rewards, map_rewards_goal_rates):
@@ -538,7 +540,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     ### get commandline parameters: 1st arg: agent; 2nd arg state_list ###
-    agentIdx = args.agentIdx
+    agentIdx = args.agentIdx or 0
     states_listIdx = args.statesIdx
     file_prefix = args.filePfx
 
@@ -554,14 +556,14 @@ if __name__ == "__main__":
     logger = logger.createLogger(config="../logging.conf.json", logger_name="__main__", logfile=CURRENT_FILE_PATH + 'logfile.log')
 
     logger.info('START SIMULATION')
-    pp = DH(logger)
+    pp = DH()
     ###############################################################
     ############################ SETUP ############################
 
     TRAIN_MODEL = True
-    RETRAIN_MODEL = False
-    TEST_MODEL = True
-    RUN_MODEL = True
+    RETRAIN_MODEL = True
+    TEST_MODEL = False
+    RUN_MODEL = False
     OPTIMIZE = False
 
     #noiseConf = {"north": [0, 0], "west": [0, 0], "ost": [0, 0]}
@@ -622,6 +624,9 @@ if __name__ == "__main__":
         {'alpha': 0.1, 'gamma': 0.9 },    # SARSA
         {'alpha': 0.006, 'gamma': 0.75 },   # Q
         {'alpha': 0.006, 'gamma': 0.8 },    # QQ
+        {'alpha': 0.01, 'gamma': 0.9 },    # EXPSARSA
+        {'alpha': 0.003, 'gamma': 0.95 },    # NSTEPSARSA
+        {'alpha': 0.01, 'gamma': 0.99 },    # nstepqsigma
     ]
     agent_alpha = hyperparameter[agentIdx]['alpha'] #qq 0.006 # 2st 0.005 # 1st 0.1
     agent_gamma = hyperparameter[agentIdx]['gamma'] #qq 0.8 # 2st 0.78 # 1st 0.9
@@ -640,7 +645,10 @@ if __name__ == "__main__":
     agents = [
         TDL.SARSA(nStates, nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon),
         TDL.QLearning(nStates, nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon),
-        TDL.DoubleQLearning(nStates, nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon)
+        TDL.DoubleQLearning(nStates, nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon),
+        TDL.ExpectedSARSA(nStates, nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon),
+        TDL.nStepSARSA(nStates, nActions, agent_alpha, agent_gamma, epsilon=policy_epsilon, n=15),
+        TDL.nStepTreeBackup(nStates, nActions, agent_gamma, agent_gamma, epsilon=policy_epsilon, n=15),
     ]
 
     agent = agents[agentIdx]
@@ -658,7 +666,7 @@ if __name__ == "__main__":
         )
         # 1st: search_space = {"alpha": [0.01, 0.05, 0.1, 0.15, 0.2], "gamma": [0.8, 0.85, 0.9, 0.95, 0.99]}
         # 2st: search_space = {"alpha": [0.001, 0.005, 0.01], "gamma": [0.75, 0.78, 0.8, 0.82, 0.85]} ## Q-Learning
-        search_space = {"alpha": [0.006, 0.007, 0.008, 0.009], "gamma": [0.75, 0.78, 0.8, 0.82, 0.85]}
+        search_space = {"alpha": [0.003, 0.01, 0.03], "gamma": [0.9, 0.95, 0.99]}
         #search_space = {"alpha": [0.01, 0.05], "gamma": [0.99, 0.8]}
         study = optuna.create_study(directions=["maximize","maximize"],
             sampler=optuna.samplers.GridSampler(search_space))

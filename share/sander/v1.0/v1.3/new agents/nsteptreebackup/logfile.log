@@ -1,0 +1,39 @@
+
+	2024-06-27 09:21:58 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [558]	INFO : START SIMULATION	
+
+
+	2024-06-27 09:21:59 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [655]	INFO : AGENT 'n-step Tree Backup' SELECTED	
+
+
+	2024-06-27 09:21:59 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [692]	INFO : TRAIN AGENT [../model_storage/zE04/2024-06-27_09-21-58/]	
+
+
+	2024-06-27 09:21:59 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [159]	INFO : Episode: 0	
+
+
+	2024-06-27 09:22:53 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:train_model [111]	INFO : Training Statistics: Avg Steps = 224.65, Avg Reward = -1479.82, Goal Rate = 0.00%	
+
+
+	2024-06-27 09:22:53 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [694]	INFO : FINISH TRAINING OF AGENT	
+
+
+	2024-06-27 09:22:53 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [710]	INFO : LOADING TRAININGSDATA '../model_storage/zE04/2024-06-27_09-21-58/q-table_n-step Tree Backup_2024-06-27_09-21-58'	
+
+
+	2024-06-27 09:22:53 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [713]	INFO : RETRAIN AGENT WITH '../model_storage/zE04/2024-06-27_09-21-58/q-table_n-step Tree Backup_2024-06-27_09-21-58' [../model_storage/zE04/2024-06-27_09-21-58/]	
+
+
+	2024-06-27 09:22:53 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:train_model [97]	INFO : USE GIVEN Q-TABLE	
+
+
+	2024-06-27 09:22:53 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [159]	INFO : Episode: 0	
+
+
+	2024-06-27 09:24:28 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:train_model [111]	INFO : Training Statistics: Avg Steps = 406.18, Avg Reward = -45.25, Goal Rate = 0.00%	
+
+
+	2024-06-27 09:24:28 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [715]	INFO : FINISH RETRAINING OF AGENT	
+
+
+	2024-06-27 09:24:28 - __main__ || c:\Users\sande\Projekte\Project_Vampire\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [739]	INFO : EXIT SIMULATION	
+
