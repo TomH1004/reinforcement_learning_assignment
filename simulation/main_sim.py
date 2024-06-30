@@ -540,7 +540,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     ### get commandline parameters: 1st arg: agent; 2nd arg state_list ###
-    agentIdx = args.agentIdx or 0
+    agentIdx = args.agentIdx or 4
     states_listIdx = args.statesIdx
     file_prefix = args.filePfx
 
