@@ -1,0 +1,375 @@
+
+	2024-06-20 23:05:22 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [550]	INFO : START SIMULATION	
+
+
+	2024-06-20 23:05:22 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [636]	INFO : AGENT 'Q-Learning' SELECTED	
+
+
+	2024-06-20 23:05:22 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [641]	INFO : OPTIMIZE PARAMETER [../model_storage/zOpt02/2024-06-20_23-05-22/]	
+
+
+	2024-06-20 23:05:22 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [456]	INFO : New set of hyper parameter: alpha=0.01, gamma=0.80, epsilon=0.10	
+
+
+	2024-06-20 23:05:22 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 0	
+
+
+	2024-06-20 23:07:24 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 100	
+
+
+	2024-06-20 23:10:31 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 200	
+
+
+	2024-06-20 23:13:25 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 300	
+
+
+	2024-06-20 23:16:24 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 400	
+
+
+	2024-06-20 23:19:21 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [473]	INFO : Results of hyper parameter: alpha=0.01, gamma=0.80, epsilon=0.10	
+
+
+	2024-06-20 23:19:21 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [474]	INFO : Training Statistics: Avg Steps = 574.53, Avg Reward = 3226.07, Goal Rate = 22.00%	
+
+
+	2024-06-20 23:19:21 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [456]	INFO : New set of hyper parameter: alpha=0.01, gamma=0.82, epsilon=0.10	
+
+
+	2024-06-20 23:19:21 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 0	
+
+
+	2024-06-20 23:21:52 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 100	
+
+
+	2024-06-20 23:25:23 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 200	
+
+
+	2024-06-20 23:28:45 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 300	
+
+
+	2024-06-20 23:31:47 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 400	
+
+
+	2024-06-20 23:35:01 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [473]	INFO : Results of hyper parameter: alpha=0.01, gamma=0.82, epsilon=0.10	
+
+
+	2024-06-20 23:35:01 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [474]	INFO : Training Statistics: Avg Steps = 658.02, Avg Reward = 3478.60, Goal Rate = 22.60%	
+
+
+	2024-06-20 23:35:01 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [456]	INFO : New set of hyper parameter: alpha=0.00, gamma=0.78, epsilon=0.10	
+
+
+	2024-06-20 23:35:01 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 0	
+
+
+	2024-06-20 23:36:54 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 100	
+
+
+	2024-06-20 23:39:54 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 200	
+
+
+	2024-06-20 23:43:08 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 300	
+
+
+	2024-06-20 23:46:16 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 400	
+
+
+	2024-06-20 23:49:27 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [473]	INFO : Results of hyper parameter: alpha=0.00, gamma=0.78, epsilon=0.10	
+
+
+	2024-06-20 23:49:27 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [474]	INFO : Training Statistics: Avg Steps = 593.70, Avg Reward = 3155.49, Goal Rate = 20.40%	
+
+
+	2024-06-20 23:49:27 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [456]	INFO : New set of hyper parameter: alpha=0.01, gamma=0.75, epsilon=0.10	
+
+
+	2024-06-20 23:49:27 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 0	
+
+
+	2024-06-20 23:52:08 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 100	
+
+
+	2024-06-20 23:55:13 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 200	
+
+
+	2024-06-20 23:58:16 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 300	
+
+
+	2024-06-21 00:01:09 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 400	
+
+
+	2024-06-21 00:04:11 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [473]	INFO : Results of hyper parameter: alpha=0.01, gamma=0.75, epsilon=0.10	
+
+
+	2024-06-21 00:04:11 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [474]	INFO : Training Statistics: Avg Steps = 608.33, Avg Reward = 3971.97, Goal Rate = 32.40%	
+
+
+	2024-06-21 00:04:11 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [456]	INFO : New set of hyper parameter: alpha=0.01, gamma=0.80, epsilon=0.10	
+
+
+	2024-06-21 00:04:11 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 0	
+
+
+	2024-06-21 00:06:56 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 100	
+
+
+	2024-06-21 00:10:00 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 200	
+
+
+	2024-06-21 00:13:20 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 300	
+
+
+	2024-06-21 00:16:29 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 400	
+
+
+	2024-06-21 00:19:45 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [473]	INFO : Results of hyper parameter: alpha=0.01, gamma=0.80, epsilon=0.10	
+
+
+	2024-06-21 00:19:45 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [474]	INFO : Training Statistics: Avg Steps = 638.29, Avg Reward = 3871.98, Goal Rate = 29.40%	
+
+
+	2024-06-21 00:19:45 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [456]	INFO : New set of hyper parameter: alpha=0.00, gamma=0.85, epsilon=0.10	
+
+
+	2024-06-21 00:19:45 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 0	
+
+
+	2024-06-21 00:21:47 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 100	
+
+
+	2024-06-21 00:25:18 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 200	
+
+
+	2024-06-21 00:29:13 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 300	
+
+
+	2024-06-21 00:33:01 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 400	
+
+
+	2024-06-21 00:36:33 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [473]	INFO : Results of hyper parameter: alpha=0.00, gamma=0.85, epsilon=0.10	
+
+
+	2024-06-21 00:36:33 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [474]	INFO : Training Statistics: Avg Steps = 693.39, Avg Reward = 2519.65, Goal Rate = 17.60%	
+
+
+	2024-06-21 00:36:33 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [456]	INFO : New set of hyper parameter: alpha=0.01, gamma=0.75, epsilon=0.10	
+
+
+	2024-06-21 00:36:33 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 0	
+
+
+	2024-06-21 00:39:29 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 100	
+
+
+	2024-06-21 00:42:42 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 200	
+
+
+	2024-06-21 00:45:58 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 300	
+
+
+	2024-06-21 00:48:58 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 400	
+
+
+	2024-06-21 00:51:50 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [473]	INFO : Results of hyper parameter: alpha=0.01, gamma=0.75, epsilon=0.10	
+
+
+	2024-06-21 00:51:50 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [474]	INFO : Training Statistics: Avg Steps = 637.55, Avg Reward = 4370.74, Goal Rate = 31.60%	
+
+
+	2024-06-21 00:51:50 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [456]	INFO : New set of hyper parameter: alpha=0.01, gamma=0.85, epsilon=0.10	
+
+
+	2024-06-21 00:51:50 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 0	
+
+
+	2024-06-21 00:54:31 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 100	
+
+
+	2024-06-21 00:57:31 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 200	
+
+
+	2024-06-21 01:00:28 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 300	
+
+
+	2024-06-21 01:03:53 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 400	
+
+
+	2024-06-21 01:07:06 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [473]	INFO : Results of hyper parameter: alpha=0.01, gamma=0.85, epsilon=0.10	
+
+
+	2024-06-21 01:07:06 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [474]	INFO : Training Statistics: Avg Steps = 627.87, Avg Reward = 4196.63, Goal Rate = 30.80%	
+
+
+	2024-06-21 01:07:06 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [456]	INFO : New set of hyper parameter: alpha=0.00, gamma=0.75, epsilon=0.10	
+
+
+	2024-06-21 01:07:06 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 0	
+
+
+	2024-06-21 01:08:48 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 100	
+
+
+	2024-06-21 01:12:31 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 200	
+
+
+	2024-06-21 01:16:13 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 300	
+
+
+	2024-06-21 01:20:06 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 400	
+
+
+	2024-06-21 01:23:57 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [473]	INFO : Results of hyper parameter: alpha=0.00, gamma=0.75, epsilon=0.10	
+
+
+	2024-06-21 01:23:57 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [474]	INFO : Training Statistics: Avg Steps = 708.98, Avg Reward = 2282.90, Goal Rate = 14.40%	
+
+
+	2024-06-21 01:23:57 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [456]	INFO : New set of hyper parameter: alpha=0.01, gamma=0.85, epsilon=0.10	
+
+
+	2024-06-21 01:23:57 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 0	
+
+
+	2024-06-21 01:26:54 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 100	
+
+
+	2024-06-21 01:30:23 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 200	
+
+
+	2024-06-21 01:33:27 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 300	
+
+
+	2024-06-21 01:36:22 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 400	
+
+
+	2024-06-21 01:39:26 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [473]	INFO : Results of hyper parameter: alpha=0.01, gamma=0.85, epsilon=0.10	
+
+
+	2024-06-21 01:39:26 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [474]	INFO : Training Statistics: Avg Steps = 642.48, Avg Reward = 4409.32, Goal Rate = 34.60%	
+
+
+	2024-06-21 01:39:26 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [456]	INFO : New set of hyper parameter: alpha=0.01, gamma=0.82, epsilon=0.10	
+
+
+	2024-06-21 01:39:26 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 0	
+
+
+	2024-06-21 01:41:46 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 100	
+
+
+	2024-06-21 01:44:47 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 200	
+
+
+	2024-06-21 01:47:53 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 300	
+
+
+	2024-06-21 01:50:52 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 400	
+
+
+	2024-06-21 01:53:36 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [473]	INFO : Results of hyper parameter: alpha=0.01, gamma=0.82, epsilon=0.10	
+
+
+	2024-06-21 01:53:36 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [474]	INFO : Training Statistics: Avg Steps = 582.60, Avg Reward = 3959.24, Goal Rate = 29.40%	
+
+
+	2024-06-21 01:53:36 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [456]	INFO : New set of hyper parameter: alpha=0.00, gamma=0.82, epsilon=0.10	
+
+
+	2024-06-21 01:53:36 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 0	
+
+
+	2024-06-21 01:55:01 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 100	
+
+
+	2024-06-21 01:58:36 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 200	
+
+
+	2024-06-21 02:02:24 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 300	
+
+
+	2024-06-21 02:06:01 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 400	
+
+
+	2024-06-21 02:09:58 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [473]	INFO : Results of hyper parameter: alpha=0.00, gamma=0.82, epsilon=0.10	
+
+
+	2024-06-21 02:09:58 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [474]	INFO : Training Statistics: Avg Steps = 676.63, Avg Reward = 1885.70, Goal Rate = 12.20%	
+
+
+	2024-06-21 02:09:58 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [456]	INFO : New set of hyper parameter: alpha=0.00, gamma=0.80, epsilon=0.10	
+
+
+	2024-06-21 02:09:58 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 0	
+
+
+	2024-06-21 02:11:50 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 100	
+
+
+	2024-06-21 02:15:17 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 200	
+
+
+	2024-06-21 02:18:59 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 300	
+
+
+	2024-06-21 02:22:44 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 400	
+
+
+	2024-06-21 02:26:29 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [473]	INFO : Results of hyper parameter: alpha=0.00, gamma=0.80, epsilon=0.10	
+
+
+	2024-06-21 02:26:29 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [474]	INFO : Training Statistics: Avg Steps = 692.58, Avg Reward = 2883.11, Goal Rate = 18.20%	
+
+
+	2024-06-21 02:26:29 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [456]	INFO : New set of hyper parameter: alpha=0.01, gamma=0.78, epsilon=0.10	
+
+
+	2024-06-21 02:26:29 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 0	
+
+
+	2024-06-21 02:28:58 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 100	
+
+
+	2024-06-21 02:32:27 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 200	
+
+
+	2024-06-21 02:35:45 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 300	
+
+
+	2024-06-21 02:38:54 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 400	
+
+
+	2024-06-21 02:42:17 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [473]	INFO : Results of hyper parameter: alpha=0.01, gamma=0.78, epsilon=0.10	
+
+
+	2024-06-21 02:42:17 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [474]	INFO : Training Statistics: Avg Steps = 662.93, Avg Reward = 2977.54, Goal Rate = 20.00%	
+
+
+	2024-06-21 02:42:17 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [456]	INFO : New set of hyper parameter: alpha=0.01, gamma=0.78, epsilon=0.10	
+
+
+	2024-06-21 02:42:17 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 0	
+
+
+	2024-06-21 02:44:07 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 100	
+
+
+	2024-06-21 02:47:28 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 200	
+
+
+	2024-06-21 02:50:25 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 300	
+
+
+	2024-06-21 02:53:22 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [155]	INFO : Episode: 400	
+
+
+	2024-06-21 02:56:16 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [473]	INFO : Results of hyper parameter: alpha=0.01, gamma=0.78, epsilon=0.10	
+
+
+	2024-06-21 02:56:16 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:optimize_params [474]	INFO : Training Statistics: Avg Steps = 578.52, Avg Reward = 3524.12, Goal Rate = 26.20%	
+
+
+	2024-06-21 02:56:18 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [662]	INFO : FINISHED OPTIMIZING	
+
+
+	2024-06-21 02:56:18 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [718]	INFO : EXIT SIMULATION	
+

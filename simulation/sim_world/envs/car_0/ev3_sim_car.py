@@ -179,9 +179,9 @@ class SimCar:
         self._map = None # init map and sensors by env
 
         #TODO: Car Eigenschaften rauslösen
-        self.car_X = 50
-        self.car_Y = 50
-        self.car_size = 24 # cm
+        self.car_X = 25
+        self.car_Y = 25
+        self.car_size = 12 # cm
         self.resize_factor = self.car_X / self.car_size
 
         self._surface = pygame.image.load(car_file)
