@@ -113,15 +113,15 @@ def train_model(env, agent, states_list, file_path, file_prefix, file_suffix, q_
 
 def test_model(env, agent, states_list, file_path, file_prefix, file_suffix, q_table=None):
     # load rewards and q-table
-    __rewards = read_numpy_data(numpy_file=file_path + file_prefix + 'reward_sums' + file_suffix)
+    __rewards = read_numpy_data(numpy_file=r'C:\Users\sande\Projekte\RL\reinforcement_learning_assignment\share\LAST\zE04\2024-06-25_00-06-07\race3-575-reward_sums_Q-Learning_2024-06-25_00-06-07')
     logger.debug('rewards loaded = \'%s\'', str(__rewards))
-    __q_data = read_numpy_data(numpy_file=file_path + file_prefix + 'q-table' + file_suffix)
+    __q_data = read_numpy_data(numpy_file=r'C:\Users\sande\Projekte\RL\reinforcement_learning_assignment\share\LAST\zE04\2024-06-25_00-06-07\race3-575-q-table_Q-Learning_2024-06-25_00-06-07')
 
     # test the q-table
-    map_goal_rates, total_goal_rate = _test_q_table(q_table=__q_data, env=env, states_list=states_list, agent_nEpisodes=100)
+    map_goal_rates, total_goal_rate, total_energy_zero_rate, total_crash_rate, total_step_rate = _test_q_table(q_table=__q_data, env=env, states_list=states_list, agent_nEpisodes=100)
     np.savez(file_path + file_prefix + 'map_goal_rates' + file_suffix + '.npy', map_goal_rates, total_goal_rate)
     # Plot the goal rates
-    #plot_goal_rates(map_goal_rates, total_goal_rate)
+    plot_goal_rates(map_goal_rates, total_goal_rate, total_energy_zero_rate, total_crash_rate, total_step_rate)
 
 ################################################################
 ### Additional functions only for the simulation environment ###
@@ -274,11 +274,17 @@ def _test_q_table(q_table, env, states_list, agent_nEpisodes):
     __observation_space_nums = __get_observation_space_num(env=env, states_list=states_list)
 
     map_goal_rates = {}
+    map_energy_zero_rates = {}
+    map_crash_rates = {}
+    map_step_rates = {}
+    total_steps = 0
+    total_crashes = 0
+    total_energy_zero = 0
     total_goals = 0
     total_episodes = 0
 
     for map_name, config in maps_config.items():
-        map_goal_rates[map_name] = {'goals': 0, 'episodes': 0}
+        map_goal_rates[map_name] = {'goals': 0, 'episodes': 0, 'steps': 0, 'energy_zero':0, 'crashes': 0}
 
         MAP = config["path"]
         MAP_START_COORDINATES = config["start_coordinates"]
@@ -288,7 +294,7 @@ def _test_q_table(q_table, env, states_list, agent_nEpisodes):
         sim_pygame = Simulation(map_file_path=MAP, car=sim_car, start_coordinates=MAP_START_COORDINATES, checkpoints_list=MAP_CHECK_POINT_LIST)
         env = gym.make("Robot_Simulation_Pygame-v2", pygame=sim_pygame)
 
-        for __e in range(100):  # Test each map for 100 episodes
+        for __e in range(agent_nEpisodes):  # Test each map for 100 episodes
             __timesteps = 0
             __state = env.reset()
 
@@ -322,15 +328,31 @@ def _test_q_table(q_table, env, states_list, agent_nEpisodes):
                 map_goal_rates[map_name]['goals'] += 1
                 total_goals += 1
                 print(f"Episode {__e + 1} on Map {map_name}: REACHED GOAL")
+            if sim_car.energy <= 0 and sim_car._is_crashed is False:
+                map_goal_rates[map_name]['energy_zero'] += 1
+                total_energy_zero += 1
+                print(f"Episode {__e + 1} on Map {map_name}: ENERGY ZERO")
+            if sim_car._is_crashed is True:
+                map_goal_rates[map_name]['crashes'] += 1
+                total_crashes += 1
+                print(f"Episode {__e + 1} on Map {map_name}: CAR CRASHED")
+            map_goal_rates[map_name]['steps'] += __timesteps
+            total_steps += __timesteps
 
     # Compute the goal rate for each map
     for map_key in map_goal_rates:
         map_goal_rates[map_key]['goal_rate'] = (map_goal_rates[map_key]['goals'] / map_goal_rates[map_key]['episodes']) * 100
+        map_goal_rates[map_key]['energy_zero_rate'] = (map_goal_rates[map_key]['energy_zero'] / map_goal_rates[map_key]['episodes']) * 100
+        map_goal_rates[map_key]['crash_rate'] = (map_goal_rates[map_key]['crashes'] / map_goal_rates[map_key]['episodes']) * 100
+        map_goal_rates[map_key]['step_rate'] = (map_goal_rates[map_key]['steps'] / map_goal_rates[map_key]['episodes']) * 100
 
     # Compute the total goal rate for all maps
     total_goal_rate = (total_goals / total_episodes) * 100
+    total_energy_zero_rate = (total_energy_zero / total_episodes) * 100
+    total_crash_rate = (total_crashes / total_episodes) * 100
+    total_step_rate = (total_steps / total_episodes) * 100
 
-    return map_goal_rates, total_goal_rate
+    return map_goal_rates, total_goal_rate, total_energy_zero_rate, total_crash_rate, total_step_rate
 
 def __get_observation_space_num(env, states_list):
     """get the number of steps per dimenion of the observation space
@@ -477,26 +499,33 @@ def plot_rewards(rewards, map_rewards_goal_rates):
     rewards_smooth = np.convolve(rewards, np.ones(window_size) / window_size, mode='valid')
     
     # Erstelle das Liniendiagramm des gleitenden Durchschnitts
-#    plt.figure(figsize=(12, 6))
-#    plt.plot(rewards_smooth, label='Moving Average of Rewards', color='orange')
-#    plt.xlabel('Episode')
-#    plt.ylabel('Sum of Rewards')
-#    plt.title('Moving Average of Rewards in Each Episode')
-#    plt.legend()
-#    plt.grid(True)
-#    plt.show()
+    # plt.figure(figsize=(12, 6))
+    # plt.plot(rewards_smooth, label='Moving Average of Rewards', color='orange')
+    # plt.xlabel('Episode')
+    # plt.ylabel('Sum of Rewards')
+    # plt.title('Moving Average of Rewards in Each Episode')
+    # plt.legend()
+    # plt.grid(True)
+    # plt.show()
 
     return rewards_smooth
 
 
-def plot_goal_rates(map_rewards_goal_rates, overall_goal_rate):
+def plot_goal_rates(map_rewards_goal_rates, overall_goal_rate, total_energy_zero_rate, total_crash_rate, total_step_rate):
     map_names = list(map_rewards_goal_rates.keys())
     goal_rates = [data['goal_rate'] for data in map_rewards_goal_rates.values()]
-    
+    energy_zero_rate = [data['energy_zero_rate'] for data in map_rewards_goal_rates.values()]
+    crash_rate = [data['crash_rate'] for data in map_rewards_goal_rates.values()]
+    step_rate = [data['step_rate'] for data in map_rewards_goal_rates.values()]
+
     # Add overall goal rate to the data
     map_names.append('Overall')
     goal_rates.append(overall_goal_rate)
+    energy_zero_rate.append(total_energy_zero_rate)
+    crash_rate.append(total_crash_rate)
+    step_rate.append(total_step_rate)
     
+    # Plot Goal Rates
     plt.figure(figsize=(12, 6))
     plt.bar(map_names, goal_rates, color='blue')
     plt.xlabel('Map')
@@ -505,6 +534,45 @@ def plot_goal_rates(map_rewards_goal_rates, overall_goal_rate):
     plt.xticks(rotation=45)
     plt.grid(True)
     plt.show()
+
+    # Plot Energy Zero Rates
+    plt.figure(figsize=(12, 6))
+    plt.bar(map_names, energy_zero_rate, color='green')
+    plt.xlabel('Map')
+    plt.ylabel('Out of Energy Rate (%)')
+    plt.title('Out of Energy Rate per Map and Overall')
+    plt.xticks(rotation=45)
+    plt.grid(True)
+    plt.show()
+
+    # Plot Crash Rates
+    plt.figure(figsize=(12, 6))
+    plt.bar(map_names, crash_rate, color='red')
+    plt.xlabel('Map')
+    plt.ylabel('Crash Rate (%)')
+    plt.title('Crash Rate per Map and Overall')
+    plt.xticks(rotation=45)
+    plt.grid(True)
+    plt.show()
+
+    # Plot Step Rates
+    plt.figure(figsize=(12, 6))
+    plt.bar(map_names, step_rate, color='purple')
+    plt.xlabel('Map')
+    plt.ylabel('Step Rate (%)')
+    plt.title('Step Rate per Map and Overall')
+    plt.xticks(rotation=45)
+    plt.grid(True)
+    plt.show()
+
+    # Print the rates for each map and overall
+    print("\nRates per Map and Overall:")
+    for i, map_name in enumerate(map_names):
+        print(f"Map: {map_name}")
+        print(f"  Goal Rate: {goal_rates[i]}")
+        print(f"  Out of Energy Rate: {energy_zero_rate[i]}")
+        print(f"  Crash Rate: {crash_rate[i]}")
+        print(f"  Step Rate: {step_rate[i]}")
 
 
 def setup_random_map():
@@ -558,7 +626,7 @@ if __name__ == "__main__":
     ###############################################################
     ############################ SETUP ############################
 
-    TRAIN_MODEL = True
+    TRAIN_MODEL = False
     RETRAIN_MODEL = False
     TEST_MODEL = True
     RUN_MODEL = False
@@ -615,7 +683,7 @@ if __name__ == "__main__":
 
     agent_exerciseID = 0
     agent_nExperiments = 1
-    agent_nEpisodes = 500
+    agent_nEpisodes = 5
 
     # Agent
     hyperparameter = [
