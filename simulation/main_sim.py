@@ -114,12 +114,12 @@ def train_model(env, agent, states_list, file_path, file_prefix, file_suffix, q_
 
 def test_model(env, agent, states_list, file_path, file_prefix, file_suffix, q_table=None):
     # load rewards and q-table
-    __rewards = read_numpy_data(numpy_file=r'C:\Users\sande\Projekte\RL\reinforcement_learning_assignment\share\LAST\zE04\2024-06-25_00-06-07\race3-575-reward_sums_Q-Learning_2024-06-25_00-06-07')
+    __rewards = read_numpy_data(numpy_file=file_path + file_prefix + 'reward_sums' + file_suffix)
     logger.debug('rewards loaded = \'%s\'', str(__rewards))
-    __q_data = read_numpy_data(numpy_file=r'C:\Users\sande\Projekte\RL\reinforcement_learning_assignment\share\LAST\zE04\2024-06-25_00-06-07\race3-575-q-table_Q-Learning_2024-06-25_00-06-07')
+    __q_data = read_numpy_data(numpy_file=file_path + file_prefix + 'q-table' + file_suffix)
 
     # test the q-table
-    map_goal_rates, total_goal_rate, total_energy_zero_rate, total_crash_rate, total_step_rate = _test_q_table(q_table=__q_data, env=env, states_list=states_list, agent_nEpisodes=100)
+    map_goal_rates, total_goal_rate, total_energy_zero_rate, total_crash_rate, total_step_rate = _test_q_table(q_table=__q_data, env=env, states_list=states_list, agent_nEpisodes=agent_nEpisodes)
     np.savez(file_path + file_prefix + 'map_goal_rates' + file_suffix + '.npy', map_goal_rates, total_goal_rate)
     # Plot the goal rates
     plot_goal_rates(map_goal_rates, total_goal_rate, total_energy_zero_rate, total_crash_rate, total_step_rate)
@@ -611,7 +611,7 @@ if __name__ == "__main__":
     states_listIdx = args.statesIdx
     file_prefix = args.filePfx
 
-    ROOT_FILE_PATH = "../model_storage/zE05sCar/"
+    ROOT_FILE_PATH = "../model_storage/zE06slow/"
     current_datetimestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     if not os.path.exists(ROOT_FILE_PATH + current_datetimestamp):
         os.makedirs(ROOT_FILE_PATH + current_datetimestamp)
@@ -627,9 +627,9 @@ if __name__ == "__main__":
     ###############################################################
     ############################ SETUP ############################
 
-    TRAIN_MODEL = False
+    TRAIN_MODEL = True
     RETRAIN_MODEL = False
-    TEST_MODEL = True
+    TEST_MODEL = False
     RUN_MODEL = False
     OPTIMIZE = False
 
@@ -666,7 +666,7 @@ if __name__ == "__main__":
     nStates = compute_states(*states_list[states_listIdx])
 
     actions_dict = {
-        0: {'speed' : 15, 'energy' : -2},
+        0: {'speed' : 10, 'energy' : -2},
         1: {'angle' : -45, 'energy' : -15},
         2: {'angle' : 45, 'energy' : -15},
         3: {'angle' : -15, 'energy' : -5},
@@ -684,7 +684,7 @@ if __name__ == "__main__":
 
     agent_exerciseID = 0
     agent_nExperiments = 1
-    agent_nEpisodes = 5
+    agent_nEpisodes = 500
 
     # Agent
     hyperparameter = [

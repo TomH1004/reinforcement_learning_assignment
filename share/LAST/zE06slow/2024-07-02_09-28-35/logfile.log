@@ -1,0 +1,33 @@
+
+	2024-07-02 09:28:35 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [625]	INFO : START SIMULATION	
+
+
+	2024-07-02 09:28:35 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [716]	INFO : AGENT 'Double Q-Learning' SELECTED	
+
+
+	2024-07-02 09:28:35 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [753]	INFO : TRAIN AGENT [../model_storage/zE06slow/2024-07-02_09-28-35/]	
+
+
+	2024-07-02 09:28:35 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [160]	INFO : Episode: 0	
+
+
+	2024-07-02 09:31:10 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [160]	INFO : Episode: 100	
+
+
+	2024-07-02 09:34:51 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [160]	INFO : Episode: 200	
+
+
+	2024-07-02 09:38:26 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [160]	INFO : Episode: 300	
+
+
+	2024-07-02 09:41:53 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [160]	INFO : Episode: 400	
+
+
+	2024-07-02 09:45:28 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:train_model [112]	INFO : Training Statistics: Avg Steps = 691.90, Avg Reward = 476.84, Goal Rate = 5.80%	
+
+
+	2024-07-02 09:45:28 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [755]	INFO : FINISH TRAINING OF AGENT	
+
+
+	2024-07-02 09:45:28 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [801]	INFO : EXIT SIMULATION	
+

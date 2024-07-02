@@ -1,0 +1,27 @@
+
+	2024-07-02 09:20:13 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [625]	INFO : START SIMULATION	
+
+
+	2024-07-02 09:20:14 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [716]	INFO : AGENT 'Q-Learning' SELECTED	
+
+
+	2024-07-02 09:20:14 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [753]	INFO : TRAIN AGENT [../model_storage/zE06slow/2024-07-02_09-20-13/]	
+
+
+	2024-07-02 09:20:14 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:_runExperiment_NStep [160]	INFO : Episode: 0	
+
+
+	2024-07-02 09:23:06 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:train_model [112]	INFO : Training Statistics: Avg Steps = 605.24, Avg Reward = -90.92, Goal Rate = 6.00%	
+
+
+	2024-07-02 09:23:06 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [755]	INFO : FINISH TRAINING OF AGENT	
+
+
+	2024-07-02 09:23:06 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [782]	INFO : TEST AGENT [../model_storage/zE06slow/2024-07-02_09-20-13/]	
+
+
+	2024-07-02 09:54:46 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [784]	INFO : FINISH TESTING OF AGENT	
+
+
+	2024-07-02 09:54:46 - __main__ || K:\Master SS2024\Reinforcement Learning\Praktikum\reinforcement_learning_assignment\simulation\main_sim.py:main_sim.py:<module> [801]	INFO : EXIT SIMULATION	
+
