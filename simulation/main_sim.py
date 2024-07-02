@@ -1,4 +1,5 @@
 from functools import partial
+import glob
 import sys
 import os
 
@@ -709,6 +710,7 @@ if __name__ == "__main__":
     ######################### AGENT TEST ##########################
 
     if (TEST_MODEL):
+#        map_goal_paths = glob.glob(os.path.join('share', 'LAST', "EZ01", '**', '*-map_goal_rates*.npz'))
         logger.info("TEST AGENT [%s]", str(CURRENT_FILE_PATH))
         test_model(env=env, agent=agent, states_list=states_list[states_listIdx], file_path=CURRENT_FILE_PATH, file_prefix=file_prefix, file_suffix=file_suffix)
         logger.info("FINISH TESTING OF AGENT")
