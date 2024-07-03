@@ -113,9 +113,15 @@ def train_model(env, agent, states_list, file_path, file_prefix, file_suffix, q_
 
 def test_model(env, agent, states_list, file_path, file_prefix, file_suffix, q_table=None):
     # load rewards and q-table
+<<<<<<< Updated upstream
     __rewards = read_numpy_data(numpy_file=file_path + file_prefix + 'reward_sums' + file_suffix)
     logger.debug('rewards loaded = \'%s\'', str(__rewards))
     __q_data = read_numpy_data(numpy_file=file_path + file_prefix + 'q-table' + file_suffix)
+=======
+    __rewards = read_numpy_data(numpy_file=r'C:\Users\sande\Projekte\RL\reinforcement_learning_assignment\share\LAST\zE04\2024-06-25_00-06-11\race3-575-reward_sums_Double Q-Learning_2024-06-25_00-06-11')
+    logger.debug('rewards loaded = \'%s\'', str(__rewards))
+    __q_data = read_numpy_data(numpy_file=r'C:\Users\sande\Projekte\RL\reinforcement_learning_assignment\share\LAST\zE04\2024-06-25_00-06-11\race3-575-q-table_Double Q-Learning_2024-06-25_00-06-11')
+>>>>>>> Stashed changes
 
     # test the q-table
     map_goal_rates, total_goal_rate = _test_q_table(q_table=__q_data, env=env, states_list=states_list, agent_nEpisodes=100)
@@ -494,6 +500,7 @@ def plot_rewards(rewards, map_rewards_goal_rates):
 def plot_goal_rates(map_rewards_goal_rates, overall_goal_rate):
     map_names = list(map_rewards_goal_rates.keys())
     goal_rates = [data['goal_rate'] for data in map_rewards_goal_rates.values()]
+<<<<<<< Updated upstream
     
     # Add overall goal rate to the data
     map_names.append('Overall')
@@ -508,6 +515,71 @@ def plot_goal_rates(map_rewards_goal_rates, overall_goal_rate):
     plt.grid(True)
     plt.show()
 
+=======
+    energy_zero_rate = [data['energy_zero_rate'] for data in map_rewards_goal_rates.values()]
+    crash_rate = [data['crash_rate'] for data in map_rewards_goal_rates.values()]
+    step_rate = [data['step_rate'] for data in map_rewards_goal_rates.values()]
+
+    # Add overall rates
+    map_names.append('Overall')
+    goal_rates.append(overall_goal_rate)
+    energy_zero_rate.append(total_energy_zero_rate)
+    crash_rate.append(total_crash_rate)
+    step_rate.append(total_step_rate)
+
+    # Define the bar width and positions
+    bar_width = 0.2
+    index = np.arange(len(map_names))
+
+    # Create the grouped bar chart
+    fig, ax1 = plt.subplots(figsize=(14, 8))
+
+    bars_goal = ax1.bar(index, goal_rates, bar_width, label='Goal Rate', color='blue')
+    bars_energy = ax1.bar(index + bar_width, energy_zero_rate, bar_width, label='Out of Energy Rate', color='green')
+    bars_crash = ax1.bar(index + 2 * bar_width, crash_rate, bar_width, label='Crash Rate', color='red')
+
+    # Create a secondary y-axis for the step rate
+    ax2 = ax1.twinx()
+    bars_step = ax2.bar(index + 3 * bar_width, step_rate, bar_width, label='Step Rate', color='purple')
+
+    # Adding numbers above the bars
+    def add_labels(bars, ax, fontsize=12):
+        for bar in bars:
+            height = bar.get_height()
+            ax.text(bar.get_x() + bar.get_width() / 2.0, height, f'{int(height)}', ha='center', va='bottom', fontsize=fontsize)
+
+    add_labels(bars_goal, ax1)
+    add_labels(bars_energy, ax1)
+    add_labels(bars_crash, ax1)
+    add_labels(bars_step, ax2, fontsize=8)  # 66% smaller fontsize for step rate
+
+    # Labeling the axes and title
+    ax1.set_xlabel('Map')
+    ax1.set_ylabel('Rate (%)')
+    ax2.set_ylabel('Step Rate')
+    plt.title('Performance Metrics per Map and Overall')
+    ax1.set_xticks(index + 1.5 * bar_width)
+    ax1.set_xticklabels(map_names, rotation=45)
+
+    # Adding legends
+    ax1.legend(loc='upper left')
+    ax2.legend(loc='upper right')
+
+    # Show the grid and plot
+    ax1.grid(True)
+    plt.tight_layout()
+    plt.show()
+
+    # Print the rates for each map and overall
+    print("\nRates per Map and Overall:")
+    for i, map_name in enumerate(map_names):
+        print(f"Map: {map_name}")
+        print(f"  Goal Rate: {goal_rates[i]}")
+        print(f"  Out of Energy Rate: {energy_zero_rate[i]}")
+        print(f"  Crash Rate: {crash_rate[i]}")
+        print(f"  Step Rate: {step_rate[i]}")
+
+>>>>>>> Stashed changes
 
 def setup_random_map():
     map_names = list(maps_config.keys())
